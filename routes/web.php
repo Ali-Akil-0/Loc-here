@@ -22,10 +22,9 @@ use App\Http\Controllers\PartenaireController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/login', [UserController::class, 'Login']);
-Route::get('/inscrire', [UserController::class, 'Inscrire']);
-// name means name of the function inside the controller
+Route::get('/login', [UserController::class, 'Login'])->name('login');
+Route::get('/inscrire', [UserController::class, 'Inscrire'])->name('inscrire');
 Route::post('/ajouter-user', [UserController::class, 'ajouterUser'])->name('ajouter-user');
 Route::post('/acceuil', [UserController::class, 'loginUser'])->name('acceuil');
-Route::post('/plusDeProduits/{type?}/{id?}', [UserController::class, 'plusDeProduits'])->name('plusDeProduits');
-// Route::get('/acceuil', [UserController::class, 'Acceuil']);
+Route::post('/plusDeProduits', [UserController::class, 'plusDeProduits'])->name('plusDeProduits');
+Route::post('/annonce', [UserController::class, 'annonce'])->name('annonce');

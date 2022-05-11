@@ -17,7 +17,6 @@
     </script> -->
     <title>LOC HERE</title>
 </head>
-
 <body class="app__body">
     <header class="app__header">
         <div class="app__headerContent">
@@ -42,40 +41,42 @@
                 <div class="app__SignInButton" id="InscrireButton">
                 @if(isset($type))
                 @if($type=="client")
-                    <p class="app__SIgnInPar">{{$user2->UsernameClient}}</p>
+                    <p class="app__SIgnInPar">{{$user->UsernameClient}}</p>
                     <i class="fa fa-solid fa-bell"></i>
                     <i class="fa fa-solid fa-flag"></i>
                  @elseif($type=="partenaire")
-                 <p class="app__SIgnInPar">{{$user2->UsernamePartenaire}}</p>
+                 <p class="app__SIgnInPar">{{$user->UsernamePartenaire}}</p>
                     <i class="fa fa-solid fa-bell"></i>
                     <i class="fa fa-solid fa-flag"></i>
-
                  @endif
                  @else
                  <p class="app__SIgnInPar">S'inscrire</p>
                 @endif
-
                 </div>
                 <hr class="app__signInBreak" />
 
                 <div class="app__SignInButton" id="ConnecterButton">
                     @if(isset($type))
 
-                   <p class="app__SIgnInPar">Se deconnecter</p>
-
+                    <form  method="get" action='{{route('login') }}'>
+                        @csrf
+                        <button type="submit" class="exploreMoreProducts">
+                            <p class="app__SIgnInPar">Se deconnecter</p>
+                        </button>
+                    </form>
                   @else
-                  <p class="app__SIgnInPar">Se connecter</p>
-
+                  <form  method="get" action='{{route('login') }}'>
+                    @csrf
+                    <button type="submit" class="exploreMoreProducts">
+                        <p class="app__SIgnInPar">Se connecter</p>
+                    </button>
+                </form>
                   @endif
                 </div>
-
-
             </div>
         </div>
         <hr class="app__headerBreak" />
     </header>
-
-
     <main class="app__inscriptionMain app__acceuilMain">
         <div class="app__acceuilBanner">
             <div class="app__bannerTitre  app__annoncesTitre">
@@ -157,7 +158,7 @@
                                 </select>
                             </div>
                             <button class="app__annonceRechercheButton" type="submit">
-                                Chercher
+                                Chercher {{"here"}}
                             </button>
 
                         </form>
@@ -185,7 +186,37 @@
                 </div>
                 <div class="app__annoncesContenu">
                     <p class="app__annoncesNom">
-                        Nom Objet <span class="app__annonceNomPremium">[ Premium ]</span>
+                        @if(isset($type))
+                        @if($type=="client")
+
+                        <form  method="post" action='{{route('annonce',['id' => $user->id, 'type'=>"client",'idAnnonce'=>"1"]) }}'>
+                            @csrf
+                            <button type="submit" class="exploreMoreProducts">
+                                c Nom Objet
+                            </button>
+                        </form>
+                        @elseif($type=="partenaire")
+                      {{-- {{Session::set('username', $partenaire->UsernamePartenaire);}} --}}
+
+                      <form action='{{route('annonce',['id' => $user->id, 'type'=>"partenaire","idAnnonce"=>"1"]) }}' method="post">
+                        @csrf
+                        <button type="submit" class="exploreMoreProducts">
+                             p Nom Objet
+                      </button>
+                      </form>
+                      @endif
+                      @else
+                      <form action='{{route('annonce') }}' method="post">
+                        @csrf
+                        <button type="submit" class="exploreMoreProducts">
+                            non Nom Objet
+                          </button>
+                          </form>
+                      @endif
+
+
+
+                        <p class="app__annonceNomPremium">[ Premium ]</p>
                     </p>
                     <p class="app__annoncesUtilisateur">
                         Nom Utilisateur

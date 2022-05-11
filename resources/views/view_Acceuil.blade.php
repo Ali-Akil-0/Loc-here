@@ -71,12 +71,27 @@
                  <div class="app__SignInButton" id="ConnecterButton">
                     @if(!empty($client))
                     @if($client->NomClint)
-                   <p class="app__SIgnInPar">Se deconnecter</p>
+                    <form  method="get" action='{{route('login') }}'>
+                        @csrf
+                        <button type="submit" class="exploreMoreProducts">
+                            <p class="app__SIgnInPar">Se deconnecter</p>
+                        </button>
+                    </form>
                   @endif
                   @elseif($partenaire->NomPartenaire)
-                  <p class="app__SIgnInPar">Se deconnecter</p>
+                  <form  method="get" action='{{route('login') }}'>
+                    @csrf
+                    <button type="submit" class="exploreMoreProducts">
+                        <p class="app__SIgnInPar">Se deconnecter</p>
+                    </button>
+                </form>
                   @else
-                  <p class="app__SIgnInPar">Se connecter</p>
+                  <form  method="get" action='{{route('login') }}'>
+                    @csrf
+                    <button type="submit" class="exploreMoreProducts">
+                        <p class="app__SIgnInPar">Se connecter</p>
+                    </button>
+                </form>
 
                   @endif
                 </div>
@@ -196,23 +211,21 @@
                 <div class="app__annonce">
                     <img src="/img/remorque.jpg" class="app_annonceImage" />
                     <p class="app__annonceTitre">
-                        remorque porte voiture PTAC
+                        {{$AnnoncesPremium->NomObjet}}
                     </p>
                     <div class="app__annoncePrixContainer">
                         <p class="app__annoncePrix">
                             <?php
-                                echo $i;
+                                 {{$AnnoncesPremium->PrixObjet}}
                                 ?>
                             DH / Jour
                         </p>
                     </div>
                 </div>
-
                 <?php
                 }
                 ?>
             </div>
-
         </div>
         <div class="app__acceuilAutre">
 
@@ -222,19 +235,28 @@
                     @if(!empty($client))
                     {{-- {{Session::set('username', $client->UsernameClient);}} --}}
 
-                    <a href='{{route('plusDeProduits',['id' => $client->id, 'type'=>"client"]) }}'>
-                        Explorer autres produits
-                    </a>
-                  @elseif($partenaire)
+                    <form action='{{route('plusDeProduits',['id' => $client->id, 'type'=>"client"]) }}' method="post">
+                        @csrf
+                        <button type="submit" class="exploreMoreProducts">
+                            Explorer autres produits
+                        </button>
+                    </form>
+                  @elseif(!empty($partenaire))
                   {{-- {{Session::set('username', $partenaire->UsernamePartenaire);}} --}}
 
-                  <a href='{{route('plusDeProduits',['id' => $partenaire->id, 'type'=>"partenaire"])  }}'>
+                  <form action='{{route('plusDeProduits',['id' => $partenaire->id, 'type'=>"partenaire"]) }}' method="post">
+                    @csrf
+                    <button type="submit" class="exploreMoreProducts">
                     Explorer autres produits
-                </a>
+                </button>
+            </form>
                   @else
-                  <a href='{{route('plusDeProduits') }}'>
+                  <form action='{{route('plusDeProduits') }}' method="post">
+                    @csrf
+                    <button type="submit" class="exploreMoreProducts">
                     Explorer autres produits
-                </a>
+                </button>
+            </form>
                   @endif
 
                 {{-- </form> --}}

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/Content/LOC_HERE.css">
+    <link rel="stylesheet" href="/css/LOC_HERE.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
     <!-- <script>
@@ -23,7 +23,7 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="/Content/rating.js"></script>
+    <script src="/img/rating.js"></script>
     <title>LOC HERE</title>
 </head>
 
@@ -31,7 +31,7 @@
     <header class="app__header">
         <div class="app__headerContent">
             <div class="app__logoPlacement">
-                <img src="/Content/logo.png" class="app__logo" />
+                <img src="/img/logo.png" class="app__logo" />
             </div>
             <div class="app__options">
                 <div class="app__Acceuil">
@@ -49,11 +49,39 @@
             </div>
             <div class="app__signIn">
                 <div class="app__SignInButton" id="InscrireButton">
-                    <p class="app__SIgnInPar">S'inscrire</p>
+            @if(isset($type))
+                @if($type=="client")
+                    <p class="app__SIgnInPar">{{$user->UsernameClient}}</p>
+                    <i class="fa fa-solid fa-bell"></i>
+                    <i class="fa fa-solid fa-flag"></i>
+                 @elseif($type=="partenaire")
+                 <p class="app__SIgnInPar">{{$user->UsernamePartenaire}}</p>
+                    <i class="fa fa-solid fa-bell"></i>
+                    <i class="fa fa-solid fa-flag"></i>
+
+                 @endif
+                 @else
+                 <p class="app__SIgnInPar">S'inscrire</p>
+                @endif
                 </div>
                 <hr class="app__signInBreak" />
                 <div class="app__SignInButton" id="ConnecterButton">
-                    <p class="app__SIgnInPar">Se connecter</p>
+                    @if(isset($type))
+                    <form  method="get" action='{{route('login') }}'>
+                        @csrf
+                        <button type="submit" class="exploreMoreProducts">
+                            <p class="app__SIgnInPar">Se deconnecter</p>
+                        </button>
+                    </form>
+                   @else
+                   <form  method="get" action='{{route('login') }}'>
+                    @csrf
+                    <button type="submit" class="exploreMoreProducts">
+                        <p class="app__SIgnInPar">Se connecter</p>
+                    </button>
+                </form>
+
+                   @endif
                 </div>
             </div>
         </div>
@@ -64,7 +92,7 @@
     <main class="app__annonceMain">
         <div class="app__annonceBanner">
             <div class="app__annonceImageContainer">
-                <img src="/Content/remorque.jpg" class="app__annonceImage" />
+                <img src="/img/remorque.jpg" class="app__annonceImage" />
             </div>
             <div class="app__annnonceDescription">
                 <div class="app__annonceTitre2">
@@ -110,7 +138,7 @@
                 </div>
                 <div class="app__annoncePartenaire">
                     <div>
-                        <img src="/Content/Akil.png" class="app__annoncePartenaireImage" />
+                        <img src="/img/Akil.png" class="app__annoncePartenaireImage" />
                     </div>
                     <div class="app__annoncePartenaireNom">
                         <p class="app__annoncePartenaireTitre">
@@ -173,7 +201,7 @@
                 <div class="app__annonceCommentaires">
 
                     <div class="app__annonceCommentaireContainer">
-                        <img src="/Content/Akil.png" class="app__annonceImageUtilisateur" />
+                        <img src="/img/Akil.png" class="app__annonceImageUtilisateur" />
                         <div class="app__annonceCommentaireDesc">
                             <div class="annonceCommentaireTop">
                                 <p class="app__annonceCommentaireNom">
@@ -213,7 +241,7 @@
     <footer class="app__footer">
         <div class="app__footerContent">
             <div class="app__LogoDesc">
-                <img src="/Content/logo.png" class="app__footerLogo" />
+                <img src="/img/logo.png" class="app__footerLogo" />
                 <p class="app__footerDesc">
                     Nous permettons aux utilisateurs de louer du matériel
                     ou de le proposer à la location à d'autres

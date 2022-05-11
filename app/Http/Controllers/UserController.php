@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Client;
 use App\Models\Partenaire;
-
+use app\Models\Annonce;
 use Illuminate\Support\Facades\Hash;
 use Session;
 
@@ -54,7 +54,9 @@ class UserController extends Controller
             $res  = $partenaire->save();
         }
         if ($res) {
-            return redirect('acceuil');
+            $AnnoncesPremium =  new User();
+            return $AnnoncesPremium;
+            return redirect('acceuil', ["AnnoncesPremium", $AnnoncesPremium]);
         } else {
             return back()->with("fail", "$request->type, idk what's the problem");
         }
@@ -89,19 +91,64 @@ class UserController extends Controller
             }
         }
     }
-    public function plusDeProduits($id, $type)
+    public function plusDeProduits(Request $request)
     {
-        if ($type == "client") {
-            $user2 = Client::where('id', '=', $id)->first();
-            if ($user2) {
-                return view('view_Acceuil', ['user' => $user2, 'type' => $type]);
-            }
-        } elseif ($type == "partenaire") {
-            $user2 = Partenaire::where('id', '=', $id)->first();
+        $request->validate([
+            "id" => 'required',
+            "type" => 'required',
+        ]);
+        // echo "here";
+        // echo $request->id;
+        // echo $request->type;
 
-            return view('view_Acceuil', ['user' => $user2, 'type' => $type]);
+        if ($request->type == "client") {
+            // echo "client";
+            $user2 = Client::where('id', '=', $request->id)->first();
+            if ($user2) {
+                return view('view_Annonces', ['user' => $user2, 'type' => "client"]);
+            } else {
+                echo "problemClient";
+            }
+        } elseif ($request->type == "partenaire") {
+            // echo "partenaire";
+
+            $user2 = Partenaire::where('id', '=', $request->id)->first();
+
+            return view('view_Annonces', ['user' => $user2, 'type' => "partenaire"]);
         } else {
+            echo "problem";
             return view('view_Annonces');
+        }
+    }
+    public function annonce(Request $request)
+    {
+        $request->validate([
+            "id" => 'required',
+            "type" => 'required',
+            "idAnnonce" => 'required',
+        ]);
+        // echo "here";
+        // echo $request->idAnnonce;
+        // echo $request->type;
+
+
+        if ($request->type == "client") {
+            // echo "client";
+            $user2 = Client::where('id', '=', $request->id)->first();
+            if ($user2) {
+                return view('view_Annonce', ['user' => $user2, 'type' => "client", "Annonce" => $request->idAnnonce]);
+            } else {
+                echo "problemClient";
+            }
+        } elseif ($request->type == "partenaire") {
+            // echo "partenaire";
+
+            $user2 = Partenaire::where('id', '=', $request->id)->first();
+
+            return view('view_Annonce', ['user' => $user2, 'type' => "partenaire", "Annonce" => $request->idAnnonce]);
+        } else {
+            echo "problem";
+            return view('view_Annonce');
         }
     }
 }
