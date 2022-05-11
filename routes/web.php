@@ -26,4 +26,6 @@ Route::get('/login', [UserController::class, 'Login']);
 Route::get('/inscrire', [UserController::class, 'Inscrire']);
 // name means name of the function inside the controller
 Route::post('/ajouter-user', [UserController::class, 'ajouterUser'])->name('ajouter-user');
-Route::post('/login-user', [UserController::class, 'loginUser'])->name('login-user');
+Route::post('/acceuil', [UserController::class, 'loginUser'])->name('acceuil');
+Route::post('/plusDeProduits/{type?}/{id?}', [UserController::class, 'plusDeProduits'])->name('plusDeProduits');
+// Route::get('/acceuil', [UserController::class, 'Acceuil']);

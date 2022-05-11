@@ -75,7 +75,11 @@
 
         @endif --}}
         <form action="{{route('ajouter-user')}}" method='post' class="app__inscriptionForm">
-
+        @if(Session::has('fail'))
+        <div class="app__inscriptionInput">
+            <input name="fail" value="{{Session::get("fail")}}" type="text" placeholder="fail" />
+        </div>
+        @endif
             @csrf
             <div class="app__inscriptionInput">
                 <input name="nom" value="{{old('nom')}}" type="text" placeholder="Nom" />
@@ -93,13 +97,12 @@
             <div class="app__inscriptionInput">
                 <input name="password"  value="{{old('password')}}" type="password" placeholder="Mot de passe" />
             </div>
-            <!-- <div class="app__inscriptionInput">
-                <select class="app__inscriptionSelect" id="Utilisateur" name="Utilisateurs">
+             <div class="app__inscriptionInput">
+                <select name='type' value='{{old('type')}}' class="app__inscriptionSelect" id="Utilisateur" name="Utilisateurs">
                     <option value="Client" default>Client</option>
                     <option value="Partenaire">Partenaire</option>
                 </select>
-            </div> -->
-
+            </div>
             <button type='submit' class="app__inscriptionButton">
                 S'inscrire
             </button>

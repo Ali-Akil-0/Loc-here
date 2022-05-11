@@ -62,6 +62,10 @@
 
 
 }
+a{
+    color:black;
+    text-decoration: none;
+}
 .app__options{
     flex: 70%;
 
@@ -94,6 +98,8 @@
     width:100px;
     text-align:center;
     height:40px;
+    display: flex;
+    align-items: center;
 
 
 }
@@ -105,6 +111,10 @@
     font-size: 13px;
     font-family: 'Poppins', sans-serif;
     letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+
+
 
 }
 .app__signInBreak{
@@ -169,7 +179,7 @@
 .app__inscriptionMain{
     height:110vh;
     width:100vw;
-    background-image: url("/Content/background.png");
+    background-image: url("/img/background.png");
     background-color: #cccccc;
 
 }
@@ -295,7 +305,7 @@ select{
     height:400px;
     padding-left:30px;
     font-size: 45px;
-    background-image: url("/Content/Banner.png");
+    background-image: url("/img/Banner.png");
     background-color: #ff6472;
     /* background-size: auto; */
     /* background-attachment: fixed;
@@ -576,7 +586,7 @@ select{
     min-height: 240vh;
     max-height: 250vh;
     width: 100vw;
-    background-image: url("/Content/background.png");
+    background-image: url("/img/background.png");
     background-color: #cccccc;
 }
 
@@ -585,7 +595,7 @@ select{
     height:400px;
     padding-left:30px;
     /* font-size: 45px; */
-    background-image: url("/Content/AnnonceBackground4.png");
+    background-image: url("/img/AnnonceBackground4.png");
     background-color: #ff6472;
     /* background-size: auto; */
     /* background-attachment: fixed;

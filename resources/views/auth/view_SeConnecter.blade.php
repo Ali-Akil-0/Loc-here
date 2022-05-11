@@ -65,7 +65,13 @@
             </p>
 
         </div>
-        <form action='{{route('login-user')}}' method='post' class="app__inscriptionForm">
+        <form action='{{route('acceuil')}}' method='post' class="app__inscriptionForm">
+            @if(Session::has('fail'))
+            <div  class="app__inscriptionInput">
+                <input name="something" value="{{Session::get("fail")}}"  type="email" placeholder="aza" />
+            </div>
+            @endif
+
             @csrf
             <div  class="app__inscriptionInput">
                 <input name="email" value='{{old('email')}}' type="email" placeholder="Email" />
