@@ -34,24 +34,71 @@
                     <p class="app__option">Contrat</p>
                 </div>
                 <div class="app__Acceuil">
-                    <p class="app__option">Publier</p>
+
+
+
+                    @if(isset($type))
+                    @if($type=="client")
+                    <p class="app__SIgnInPar">Devenir Partenaire</p>
+
+                     @elseif($type=="partenaire")
+                     <p class="">publier</p>
+
+                     @endif
+                     @else
+                     {{-- <p class="app__SIgnInPar">S'inscrire</p> --}}
+                    @endif
                 </div>
             </div>
             <div class="app__signIn">
                 <div class="app__SignInButton" id="InscrireButton">
+
                 @if(isset($type))
                 @if($type=="client")
-                    <p class="app__SIgnInPar">{{$user->UsernameClient}}</p>
-                    <i class="fa fa-solid fa-bell"></i>
-                    <i class="fa fa-solid fa-flag"></i>
+                <form  method="get" action='{{route('profile') }}'>
+                    @csrf
+                    <button type="submit" class="exploreMoreProducts">
+                        <p class="app__SIgnInPar">{{$user->UsernameClient}}</p>
+                    </button>
+                </form>
+                <form  method="get" action='{{route('profile') }}'>
+                    @csrf
+                    <button type="submit" class="exploreMoreProducts">
+                        <i class="fa fa-solid fa-bell"></i>
+
+                    </button>
+                </form>
+                <form  method="get" action='{{route('Reclamation') }}'>
+                    @csrf
+                    <button type="submit" class="exploreMoreProducts">
+                        <i class="fa fa-solid fa-flag"></i>
+                    </button>
+                </form>
+
                  @elseif($type=="partenaire")
-                 <p class="app__SIgnInPar">{{$user->UsernamePartenaire}}</p>
-                    <i class="fa fa-solid fa-bell"></i>
-                    <i class="fa fa-solid fa-flag"></i>
+                 <form  method="get" action='{{route('profile') }}'>
+                    @csrf
+                    <button type="submit" class="exploreMoreProducts">
+                        <p class="app__SIgnInPar">{{$user->UsernamePartenaire}}</p>
+                    </button>
+                </form>
+                <form  method="get" action='{{route('profile') }}'>
+                    @csrf
+                    <button type="submit" class="exploreMoreProducts">
+                        <i class="fa fa-solid fa-bell"></i>
+                    </button>
+                </form>
+                <form  method="get" action='{{route('Reclamation') }}'>
+                    @csrf
+                    <button type="submit" class="exploreMoreProducts">
+                        <i class="fa fa-solid fa-flag"></i>
+                    </button>
+                </form>
                  @endif
                  @else
                  <p class="app__SIgnInPar">S'inscrire</p>
                 @endif
+
                 </div>
                 <hr class="app__signInBreak" />
 
@@ -82,64 +129,48 @@
             <div class="app__bannerTitre  app__annoncesTitre">
                 <div class="app__bannerRecherche app__annoncesRecherche">
                     <div class="app_blurredBackground app__annoncesBlurred">
-
                     </div>
                     <div class="app__barDeRecherche">
-                        <form class="app__rechercheFormAnnonces">
+                        <form  enctype="multipart/form-data" class="app__rechercheForm" method="POST" action='' >
+                            @method('POST')
+                            @csrf
                             <div class="app__inputNom">
-                                <input type="text" class="app__AnnonceNom"
+                                <input type="text" name="titre" class="app__AnnonceNom"
                                     placeholder="Quel outil souhaitez-vous louer ?" />
                             </div>
                             <div class="app__inputSelect">
                                 <select id="Ville" name="Ville" placeholder="Ville">
                                     <option value="" disabled selected hidden>Ville</option>
                                     <?php
-
                                     $i = 0;
-                                    for ($i = 0; $i < 7; $i++) {
+                                    foreach ($villes as $ville2) {
                                     ?>
-                                    <option value="<?php echo $i; ?>" default><?php echo $i;  ?></option>
+                                    <option value="<?php echo $ville2['VilleObjet']; ?>" default><?php echo $ville2['VilleObjet'];  ?></option>
                                     <?php
                                     }
-
                                     ?>
-
                                 </select>
                             </div>
                             <div class="app__inputSelect">
                                 <select id="Categorie" name="Categorie">
                                     <option value="" disabled selected hidden>Categorie</option>
-
                                     <?php
-
                                     $i = 0;
-                                    for ($i = 0; $i < 7; $i++) {
+                                    foreach ($categories as $categorie2) {
                                     ?>
-                                    <option value="<?php echo $i; ?>" default><?php echo $i;  ?></option>
+                                    <option value="<?php echo $categorie2["NomCategorie"]; ?>" default><?php echo $categorie2["NomCategorie"];  ?></option>
                                     <?php
                                     }
-
                                     ?>
-
                                 </select>
                             </div>
-                            <div class="app__inputSelect">
+                            {{-- <div class="app__inputSelect">
                                 <select id="Disponibilite" name="Disponibilite">
                                     <option value="" disabled selected hidden>Disponibilite</option>
-
-                                    <?php
-
-                                    $i = 0;
-                                    for ($i = 0; $i < 7; $i++) {
-                                    ?>
-                                    <option value="<?php echo $i; ?>" default><?php echo $i;  ?></option>
-                                    <?php
-                                    }
-
-                                    ?>
-
+                                    <option value="<?php echo "oui"; ?>" default><?php echo "oui";  ?></option>
+                                    <option value="<?php echo "non"; ?>" default><?php echo "non";  ?></option>
                                 </select>
-                            </div>
+                            </div> --}}
                             <div class="app__inputSelect">
                                 <select id="Prix" name="Prix">
                                     <option value="" disabled selected hidden>Prix</option>
@@ -147,9 +178,9 @@
                                     <?php
 
                                     $i = 0;
-                                    for ($i = 0; $i < 7; $i++) {
+                                    for ($i = 1; $i < 7; $i++) {
                                     ?>
-                                    <option value="<?php echo $i; ?>" default><?php echo $i;  ?></option>
+                                    <option value="<?php echo $i*100; ?>" default><?php echo "<".$i*100;  ?></option>
                                     <?php
                                     }
 
@@ -158,11 +189,14 @@
                                 </select>
                             </div>
                             <button class="app__annonceRechercheButton" type="submit">
-                                Chercher {{"here"}}
+                                Chercher
                             </button>
-
                         </form>
                     </div>
+
+
+
+
                 </div>
 
 
@@ -177,66 +211,125 @@
         <div class="app__annoncesListe">
             <?php
             $i = 0;
-            for ($i = 0; $i < 20; $i++) {
-
+            foreach ($annonces as $annonce) {
+                $test = (array)$annonce;
             ?>
+            @if(isset($CatRechercher))
+            {{-- <p>
+
+            </p> --}}
+
+            @if($test[" NomObjet"]==$titreRechercher && $test["NomCategorie"]==$CatRechercher && $test["PrixObjet"]<$prixRechercher && $test["VilleObjet"]==$villeRechercher)
             <div class="app__annoncesAnnonce">
                 <div class="app__annoncesImageContainer">
-                    <img src="/img/remorque.jpg" class="app__annoncesImage" />
+                    {{-- {{$test["Image"]}} --}}
+                    {{-- "data:image/jpeg;base64,<?php echo base64_encode($image); ?>" --}}
+                    {{-- "data:image/jpg;base64,'.base64_encode($row[{{$test["Image"]}}]).'" --}}
+                    <img src="data:image/jpeg;base64,<?php echo base64_encode($test["Image"]); ?>" class="app__annoncesImage" />
                 </div>
                 <div class="app__annoncesContenu">
                     <p class="app__annoncesNom">
                         @if(isset($type))
+                        <?php
+                        $some = $test["IdAnnonce"];
+                        ?>
                         @if($type=="client")
-
-                        <form  method="post" action='{{route('annonce',['id' => $user->id, 'type'=>"client",'idAnnonce'=>"1"]) }}'>
+                        <form  action='{{route('annonce',['id' => $user->id, 'type'=>"client",'idAnnonce'=>$test["IdAnnonce"]]) }}' method="POST" >
                             @csrf
                             <button type="submit" class="exploreMoreProducts">
-                                c Nom Objet
+                                {{$test[" NomObjet"]}}
                             </button>
                         </form>
                         @elseif($type=="partenaire")
-                      {{-- {{Session::set('username', $partenaire->UsernamePartenaire);}} --}}
-
-                      <form action='{{route('annonce',['id' => $user->id, 'type'=>"partenaire","idAnnonce"=>"1"]) }}' method="post">
+                      <form action='{{route('annonce',['id' => $user->id, 'type'=>"partenaire",'idAnnonce'=>$test["IdAnnonce"]]) }}' method="POST">
                         @csrf
                         <button type="submit" class="exploreMoreProducts">
-                             p Nom Objet
-                      </button>
+                            {{$test[" NomObjet"]}}
+                          </button>
                       </form>
                       @endif
                       @else
                       <form action='{{route('annonce') }}' method="post">
                         @csrf
                         <button type="submit" class="exploreMoreProducts">
-                            non Nom Objet
+                            {{$test[" NomObjet"]}}
                           </button>
                           </form>
                       @endif
-
-
-
-                        <p class="app__annonceNomPremium">[ Premium ]</p>
+                        {{-- <p class="app__annonceNomPremium">[ Premium ]</p> --}}
                     </p>
                     <p class="app__annoncesUtilisateur">
-                        Nom Utilisateur
+                        {{$test["UsernamePartenaire"]}}
                     </p>
                     <p class="app__annoncesDescription">
-                        Description
+                        {{$test["DescriptionObjet"]}}
                     </p>
-
                 </div>
                 <div class="app__annoncesPrixContainer app__annoncesPrixContainer2">
                     <p class="app__annoncePrix40">
-                        <?php
-                            echo $i;
-                            ?>
+                            {{$test["PrixObjet"]}}
                         DH / Jour
-
                     </p>
                 </div>
 
             </div>
+            @endif
+            @else
+            <div class="app__annoncesAnnonce">
+                <div class="app__annoncesImageContainer">
+                    {{-- {{$test["Image"]}} --}}
+                    {{-- "data:image/jpeg;base64,<?php echo base64_encode($image); ?>" --}}
+                    {{-- "data:image/jpg;base64,'.base64_encode($row[{{$test["Image"]}}]).'" --}}
+                    <img src="data:image/jpeg;base64,<?php echo base64_encode($test["Image"]); ?>" class="app__annoncesImage" />
+                </div>
+                <div class="app__annoncesContenu">
+                    <p class="app__annoncesNom">
+                        @if(isset($type))
+                        <?php
+                        $some = $test["IdAnnonce"];
+                        ?>
+                        @if($type=="client")
+                        <form  action='{{route('annonce',['id' => $user->id, 'type'=>"client",'idAnnonce'=>$test["IdAnnonce"]]) }}' method="POST" >
+                            @csrf
+                            <button type="submit" class="exploreMoreProducts">
+                                {{$test[" NomObjet"]}}
+                            </button>
+                        </form>
+                        @elseif($type=="partenaire")
+                      <form action='{{route('annonce',['id' => $user->id, 'type'=>"partenaire",'idAnnonce'=>$test["IdAnnonce"]]) }}' method="POST">
+                        @csrf
+                        <button type="submit" class="exploreMoreProducts">
+                            {{$test[" NomObjet"]}}
+                          </button>
+                      </form>
+                      @endif
+                      @else
+                      <form action='{{route('annonce') }}' method="post">
+                        @csrf
+                        <button type="submit" class="exploreMoreProducts">
+                            {{$test[" NomObjet"]}}
+                          </button>
+                          </form>
+                      @endif
+                        {{-- <p class="app__annonceNomPremium">[ Premium ]</p> --}}
+                    </p>
+                    <p class="app__annoncesUtilisateur">
+                        {{$test["UsernamePartenaire"]}}
+                    </p>
+                    <p class="app__annoncesDescription">
+                        {{$test["DescriptionObjet"]}}
+                    </p>
+                </div>
+                <div class="app__annoncesPrixContainer app__annoncesPrixContainer2">
+                    <p class="app__annoncePrix40">
+                            {{$test["PrixObjet"]}}
+                        DH / Jour
+                    </p>
+                </div>
+              </div>
+
+            @endif
+
 
             <?php
             }

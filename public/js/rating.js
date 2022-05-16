@@ -700,3 +700,14 @@
                     .rating();
         });
 });
+
+// $(".datepicker").datepicker({
+//     disable: [{ from: [2016, 2, 14], to: [2016, 2, 27] }],
+// });
+
+$(".input-daterange input").each(function () {
+    $(this).datepicker("clearDates");
+});
+$(".datepicker").datepicker({
+    disable: [{ from: [2016, 2, 14], to: [2016, 2, 27] }],
+});

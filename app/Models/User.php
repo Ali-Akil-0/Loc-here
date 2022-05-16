@@ -11,9 +11,177 @@ class User extends Model
 {
     function getAnnoncesPremium()
     {
-        $user = DB::table('annonces')->where('name', 'Premium')->first();
-        return $user;
+        // $results = DB::select('select * from annonce where Premium = oui ');
+        $results = DB::select('select * from objet o join annonce a  on  a.IdObjet  = o.IdObjet where a.Premium = "oui" ');
+
+        return $results;
     }
+    function getAllAnnonces()
+    {
+        $results = DB::select('select * from objet o join partenaires a  on  a.id  = o.idPartenaires JOIN annonce an on an.IdObjet = o.IdObjet join categorie c on c.IdCategorie =o.CategorieObjet   ');
+        return $results;
+    }
+    function checkingAllAnnnonces()
+    {
+        $results = DB::select('select * from annonce  ');
+        return $results;
+    }
+    function getVille()
+    {
+        $results = DB::select('select Distinct (VilleObjet) from objet');
+        return $results;
+    }
+
+
+    function getCategorie()
+    {
+        $results = DB::select('select Distinct * from categorie');
+
+        return $results;
+    }
+
+
+    function getInfoAnnonce($idAnnonce)
+    {
+        $results = DB::select('select IdObjet  from annonce  where IdAnnonce = :IdAnnonce ', ['IdAnnonce' => $idAnnonce]);
+        $res = json_decode(json_encode($results), true);
+        $idObjet = $res[0]['IdObjet'];
+        // $results3 = null;
+        // $results2 = DB::select('select *  from objet o  join avisobjet a on a.IdObjet  = o.IdObjet where  o.IdObjet = :IdObjet ', ['IdObjet' => $idObjet]);
+        // echo "found ????";
+        $results3 = DB::select('select *  from objet o   join annonce an  on  an.IdObjet  = o.IdObjet  where  o.IdObjet = :IdObjet ', ['IdObjet' => $idObjet]);
+        return $results3;
+        // echo $idObjet = $res[0]['IdObjet'];
+
+    }
+    function getImage($idAnnonce)
+    {
+        $results = DB::select('select *  from annonce  where IdAnnonce = :IdAnnonce ', ['IdAnnonce' => $idAnnonce]);
+        $res = (array)$results[0];
+        return $res;
+    }
+    function getObjets($idPartenaires)
+    {
+        $results = DB::select('select *  from objet   where idPartenaires  = :idPartenaires  ', ['idPartenaires' => $idPartenaires]);
+        $res = json_decode(json_encode($results), true);
+        return $res;
+    }
+
+    function getTimes()
+    {
+        $results = DB::select('select DateDebutLoc,DateFinLoc  from location ');
+        // $res = (array)$results;
+        return $results;
+    }
+    function checkAnnonce($idPartenaires)
+    {
+        $results = DB::select('select count(o.IdObjet) from objet o  join annonce an  on  an.IdObjet  = o.IdObjet   where idPartenaires    = :idPartenaires  and archivee=:archivee  group by o.IdObjet ', ['idPartenaires' => $idPartenaires, 'archivee' => "non"]);
+        $res = json_decode(json_encode($results), true);
+        return $res;
+    }
+    // function getLimits($IdAnnonce)
+    // {
+    //     $results = DB::select('select * from annonce   where IdAnnonce   = :IdAnnonce ', ['IdAnnonce' => $IdAnnonce]);
+    //     $res = json_decode(json_encode($results), true);
+    //     return $res;
+    // }
+
+    public function reponseAdminClient($idClient)
+    {
+        $results = DB::select('select * from reclamation  where idClients =:idClients ', ['idClients' => $idClient]);
+        $res = json_decode(json_encode($results), true);
+        return $res;
+    }
+    public function lireReponse($IdReclamation)
+    {
+        $results = DB::select('UPDATE reclamation set ReclamationLu=:ReclamationLu where IdReclamation =:IdReclamation  ', ['ReclamationLu' => "oui", 'IdReclamation' => $IdReclamation]);
+        if ($results) {
+            echo "success";
+        }
+    }
+    public function reponseAdminPartenaire($idPartenaires)
+    {
+        $results = DB::select('select * from reclamation  where idPartenaires  =:idPartenaires  ', ['idPartenaires' => $idPartenaires]);
+        $res = json_decode(json_encode($results), true);
+        return $res;
+    }
+
+    public function DemandesDeLocation($IDPartenaire)
+    {
+        $results = DB::select('select * from location l  join clients c on c.id = l.IdClient   where IDPartenaire   =:IDPartenaire   ', ['IDPartenaire' => $IDPartenaire]);
+        $res = json_decode(json_encode($results), true);
+        return $res;
+    }
+    public function AccepterDemandeLocation($IdLocation)
+    {
+        $results = DB::select('UPDATE location set Status=:Status where IdLocation  =:IdLocation   ', ['Status' => "Accepter", 'IdLocation' => $IdLocation]);
+        if ($results) {
+            echo "success";
+        }
+    }
+    public function RefuserDemandeLocation($IdLocation)
+    {
+        $results = DB::select('UPDATE location set Status=:Status where IdLocation  =:IdLocation   ', ['Status' => "Refuser", 'IdLocation' => $IdLocation]);
+        if ($results) {
+            echo "success";
+        }
+    }
+    public function LocationAccepterNotifs($idClient)
+    {
+        $results = DB::select('select * from location   where IdClient  =:IdClient  and Status=:Status ', ['IdClient' => $idClient, 'Status' => "Accepter"]);
+        $res = json_decode(json_encode($results), true);
+        return $res;
+    }
+    // une location has an location id and id client and id annonce
+    public function GettingInfoForEmail($IdLocation)
+    {
+        $results = DB::select('select * from location l join clients c on c.id=l.IdClient  where IdLocation =:IdLocation  ', ['IdLocation' => $IdLocation]);
+        $res = json_decode(json_encode($results), true);
+        return $res;
+    }
+    public function GettingTheObjetFormMAil($IdAnnonce)
+    {
+        $results = DB::select('select * from objet o join annonce a  on  a.IdObjet  = o.IdObjet  where a.IdAnnonce =:IdAnnonce ', ['IdAnnonce' => $IdAnnonce]);
+        $res = json_decode(json_encode($results), true);
+        return $res;
+    }
+
+    public function CheckNoteClient($IdClient)
+    {
+        $results = DB::select('select * from location  where Note=:Note and IdClient =:IdClient   ', ['Note' => "Waiting", 'IdClient' => $IdClient]);
+        $res = json_decode(json_encode($results), true);
+        return $res;
+    }
+    public function CheckNotePartenaire($IDPartenaire)
+    {
+        $results = DB::select('select * from location  where Note=:Note and IDPartenaire  =:IDPartenaire    ', ['Note' => "Waiting", 'IDPartenaire' => $IDPartenaire]);
+        $res = json_decode(json_encode($results), true);
+        return $res;
+    }
+    // get the objet and Partenaire info
+    public function getInfoLocation($IdLocation)
+    {
+        $results = DB::select('select * from location  where IdLocation   =:IdLocation     ', ['IdLocation' => $IdLocation]);
+        $res = json_decode(json_encode($results), true);
+        return $res;
+    }
+    // selecting objet
+    public function getObjetInfo($IdObjet)
+    {
+        $results = DB::select('select * from objet  where IdObjet    =:IdObjet      ', ['IdObjet' => $IdObjet]);
+        $res = json_decode(json_encode($results), true);
+        return $res;
+    }
+    // selecting Partenaire
+    public function getPartenaireInfo($id)
+    {
+        $results = DB::select('select * from partenaires  where id   =:id     ', ['id' => $id]);
+        $res = json_decode(json_encode($results), true);
+        return $res;
+    }
+
+
+
 
     use HasFactory;
 }

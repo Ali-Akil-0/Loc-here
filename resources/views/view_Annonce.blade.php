@@ -18,12 +18,23 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!------ Include the above in your HEAD tag ---------->
 
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.css" integrity="sha256-VVbO1uqtov1mU6f9qu/q+MfDmrqTfoba0rAE07szS20=" crossorigin="anonymous" />
+
+    <!------ Include the above in your HEAD tag ---------->
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+
+    <!-- JS -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+
+    {{-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="/img/rating.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script> --}}
+    <script src="/js/rating.js"></script>
     <title>LOC HERE</title>
 </head>
 
@@ -92,30 +103,77 @@
     <main class="app__annonceMain">
         <div class="app__annonceBanner">
             <div class="app__annonceImageContainer">
-                <img src="/img/remorque.jpg" class="app__annonceImage" />
+                <img src="data:image/jpeg;base64,<?php echo base64_encode($image); ?>"  class="app__annonceImage" />
             </div>
             <div class="app__annnonceDescription">
                 <div class="app__annonceTitre2">
-                    <p>Remorque</p>
+                    <p>{{$Annonce[" NomObjet"]}}</p>
                 </div>
                 <div class="app__annonceDescriptionNom">
-                    <p>Akil Ali</p>
+                    <p>{{$partenaire["UsernamePartenaire"]}}</p>
                 </div>
                 <div class="app__annonceRatingPrice">
                     <div>
-                        <p class="app__annoncePrice2">400 DH / Jour</p>
+                        <p class="app__annoncePrice2">{{$Annonce["PrixObjet"]}} DH / Jour</p>
                     </div>
                     <div class="app__annonceRating">
                         <input id="input-1" name="input-1" class="rating rating-loading" data-min="0" data-max="5"
-                            data-step="0.1" value="4">
+                            data-step="0.1" value="{{$Annonce["NoteTotalObj"]}}">
                     </div>
                 </div>
                 <div class="app__annonceLocation">
-                    <span>
-                        Se Connecter
-                    </span>
-                    <p>pour</p>
-                    <button disabled class="app__annonceLocationButton">Louer</button>
+                    @if(isset($type))
+                    @if($type=="client")
+                    <form action='{{route('location',['IDAnnonce'=>$Annonce["IdAnnonce"],'IDPartenaire'=>$partenaire['id'],'IDClient'=>$user->id] )}}' method="POST">
+                        @csrf
+                        <input type="text" class="daterange"  name="date"/>
+                        <p>
+                            <?php
+
+                                // //    echo (array)$dates[0];
+                                // //    echo ((array)$dates[0])["DateFinLoc"];
+                                //     foreach($dates as $date){
+                                //     $theDate  = (array)$date ;
+                                //     $endDate = $theDate["DateFinLoc"] ;
+                                //     $startDate =  $theDate["DateDebutLoc"];
+                                    // echo $Annonce["DateDebut"]  ;
+                                // //     echo "hello" ;
+                                    // echo  $Annonce["DateFin"] ;
+
+                               ?>
+                            </p>
+                        <script>
+
+                               $('.daterange').daterangepicker({
+                                isInvalidDate: function(date) {
+                                 if ( date.format('YYYY-MM-DD') < '<?php echo  $Annonce["DateDebut"] ?>'
+                                  || date.format('YYYY-MM-DD') > '<?php echo $Annonce["DateFin"] ;?>')
+                                  {
+                                   return true;
+                                   }
+
+                                  }
+                               });
+                         </script>
+                         {{-- <?php
+                        // }
+                        ?> --}}
+                    <button  type="submit" class="app__annonceLocationButton">Louer</button>
+                    </form>
+                    @endif
+                   @else
+                   <form  method="get" action='{{route('login') }}'>
+                    @csrf
+                    <button type="submit" class="exploreMoreProducts">
+                        <span>
+                            Se Connecter
+                        </span>
+                        <p>pour</p>
+                    </button>
+                </form>
+
+                   @endif
+
                 </div>
             </div>
         </div>
@@ -125,16 +183,97 @@
                 <div class="app__annonceInfoObjet">
                     <p class="app__annonceInfoTitre">Info Objet : </p>
                     <p class="app__annonceInfoContent">
-                        Place of Origin: Jiangsu, China
-                        Brand Name: OEM
-                        Model Number: AF248CE
-                        Type: Acoustic Guitar
-                        Body Material: Spruce plywood
-                        Neck Material: Spruce plywood
-                        Fingerboard Material: High density man-made wood
-                        Accessories: With 4-band EQ
-                        Color: Natural
+                        {{$Annonce['DescriptionObjet']}}
                     </p>
+                    <div class="app__DemandesLocation">
+
+                       <?php if(isset($type)){
+                           if($type=="partenaire"){
+                            foreach ($Demandes as $Demande) {
+                            if ($Annonce["idPartenaires"] == $user->id) {
+
+                                ?>
+                                <p class="app__annonceInfoTitre">Demandes de location : </p>
+                                <?php
+                                // echo ($Demande["DateDebutLoc"]);
+                                // echo ($Demande["DateFinLoc"]);
+                                // echo ($Demande["IDANnonce"]);
+                                // echo ($Demande["IdClient"]);
+                                // echo ($Demande["Status"]);
+                                if($Demande["Status"]=="non"){
+
+                                    ?>
+                                     <p>
+                                        <?php
+                                             echo ($Demande["UsernameClient"]);
+                                            echo " demande la location de cet objet depuis : ";
+                                            echo ($Demande["DateDebutLoc"]);
+                                            echo " jusqu'a ";
+                                            echo ($Demande["DateFinLoc"]);
+                                                // echo ($Demande["IDANnonce"]);
+                                                // echo ($Demande["Status"]);
+
+                                                // echo "here";
+                                                // echo $Demande["IdLocation"];
+                                                // echo "here";
+                                            ?>
+                                      <form action='{{route('annonce',['id' => $user->id, 'type'=>"partenaire",'idAnnonce'=>$Demande["IDANnonce"],'IdLocation'=>$Demande["IdLocation"]]) }}' method="POST">
+                                        @csrf
+                                        <input type="submit" name="accept" id="accept" value="Accepter">
+                                        <input type="submit" name="decline" id="decline" value="Refuser">
+                                    </form>
+
+
+                                   </p>
+
+                                    <?php
+
+
+                                }
+
+                                ?>
+                                  <div class="app__LocationsEnCour">
+                                    <p class="app__annonceInfoTitre">Location en Cours : </p>
+
+                                </div>
+
+                                <?php
+                            }
+                            }
+
+                            foreach ($Demandes as $Demande) {
+                            if ($Annonce["idPartenaires"] == $user->id) {
+                                $todaysDate = date_create(date("Y-m-d"));
+                                $StartDate = date_create($Demande["DateDebutLoc"]);
+                                 $EndDate = date_create($Demande["DateFinLoc"]);
+                                //  var_dump($todaysDate);
+                                //  var_dump($StartDate);
+                                //  var_dump($EndDate);
+                                //  echo $Demande["Status"] ;
+
+                                if($Demande["Status"]=="Accepter"&& $StartDate < $todaysDate && $EndDate > $todaysDate){
+                                    ?>
+                                    <p>
+                                        <?php
+                                             echo ($Demande["UsernameClient"]);
+                                            echo " est entrain de louer cet objet depuis  : ";
+                                            echo ($Demande["DateDebutLoc"]);
+                                            echo " jusqu'a ";
+                                            echo ($Demande["DateFinLoc"]);
+                                        ?>
+                                    </p>
+                                    <?php
+                                }
+                            }}
+                            ?>
+                            <?php
+
+                           }
+
+                        }
+                        ?>
+                    </div>
+
                 </div>
                 <div class="app__annoncePartenaire">
                     <div>
@@ -142,18 +281,10 @@
                     </div>
                     <div class="app__annoncePartenaireNom">
                         <p class="app__annoncePartenaireTitre">
-                            Nom :
+                            Nom d'utilisateur :
                         </p>
                         <p>
-                            Akil
-                        </p>
-                    </div>
-                    <div class="app__annoncePartenaireNom">
-                        <p class="app__annoncePartenaireTitre">
-                            Prénom :
-                        </p>
-                        <p>
-                            Ali
+                            {{$partenaire['UsernamePartenaire']}}
                         </p>
                     </div>
                     <div class="app__annoncePartenaireNom">
@@ -161,7 +292,7 @@
                             Adresse :
                         </p>
                         <p>
-                            Mhannech, Tétouan
+                            {{$partenaire['AdressePartenaire']}}
                         </p>
                     </div>
                     <div class="app__annoncePartenaireNom">
@@ -169,7 +300,7 @@
                             Tél :
                         </p>
                         <p>
-                            0653088697
+                            {{$partenaire['TelPartenaire']}}
                         </p>
                     </div>
                     <div class="app__annoncePartenaireNom">
@@ -177,13 +308,14 @@
                             Email :
                         </p>
                         <p>
-                            Ali.akil@etu.uae.ac.ma
+                            {{$partenaire['EmailPartenaire']}}
+
                         </p>
                     </div>
                     <div class="app__annoncePartenaireRating">
                         <div class="app__annonceRating app__annonceRating2">
                             <input id="input-2" name="input-2" class="rating rating-loading" data-min="0" data-max="5"
-                                data-step="0.1" value="4">
+                                data-step="0.1" value="{{$partenaire['EmailPartenaire']}}">
                         </div>
                     </div>
                 </div>
@@ -196,7 +328,7 @@
                 </div>
                 <?php
                 $i = 0;
-                for ($i = 0; $i < 7; $i++) {
+                foreach ($avisObjet as $avis) {
                 ?>
                 <div class="app__annonceCommentaires">
 
@@ -205,22 +337,22 @@
                         <div class="app__annonceCommentaireDesc">
                             <div class="annonceCommentaireTop">
                                 <p class="app__annonceCommentaireNom">
-                                    Ali Akil
+                                    {{$avis["UsernameClient"]}}
                                 </p>
                                 <div class="app__annonceCommentaireRating">
                                     <div class="app__annonceRating app__annonceRating2">
                                         <input id="input-3" name="input-3" class="rating rating-loading" data-min="0"
-                                            data-max="5" data-step="0.1" value="4">
+                                            data-max="5" data-step="0.1" value="{{$avis["NoteObjet"]}}">
                                     </div>
                                 </div>
 
                             </div>
                             <div class="app__annonceCommentaireContent">
-                                Excellent
+                                {{$avis["CommentaireObjet"]}}
                             </div>
                         </div>
                         <div class="app__annonceCommentaireTime">
-                            <p> <span class="app__annonceCommentaireDate">11/04/2022</span> 10:30</p>
+                            <p> <span class="app__annonceCommentaireDate">{{$avis["DateAvisObjet"]}}</span></p>
                         </div>
                     </div>
 
@@ -278,5 +410,8 @@
     </footer>
 
 </body>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.js" integrity="sha256-zI6VVO07NPmVW11q3RQE42YbRmJIkkunrcQ9LEYxJsQ=" crossorigin="anonymous"></script>
 </html>

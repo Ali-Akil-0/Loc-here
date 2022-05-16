@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+@import url("http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css");
 *{
     max-width: 100vw;
     /* margin: 0; */
@@ -62,6 +63,7 @@
     opacity:0.5;
     margin: 0;
     padding:0;
+    z-index: -1;
 
 
 }
@@ -103,7 +105,7 @@ a{
     border-radius: 20px;
     background-color: white;
     cursor: pointer;
-    width:100px;
+    width:200px;
     text-align:center;
     height:40px;
     display: flex;
@@ -322,6 +324,8 @@ select{
     background-repeat: no-repeat;
     /* object-fit: cover; */
     color:white;
+    position: relative;
+    z-index: 1;
 }
 .app__acceuilMain{
     min-height: 250vh;
@@ -596,6 +600,7 @@ select{
     width: 100vw;
     background-image: url("/img/background.png");
     background-color: #cccccc;
+    z-index: -1;
 }
 
 .app__annonceBanner{
@@ -848,3 +853,268 @@ select{
     color: gold;
     margin-left: 30px;
 }
+
+
+
+/* NOTES */
+
+#notes
+{
+    padding: 0px ;
+    padding-top: 1px;
+    padding-bottom: 40px;
+    margin-top: 50px;
+    text-align: center;
+}
+#notes h3
+{
+    width: 400px;
+    text-transform: uppercase;
+    margin: 0 auto 40px auto;
+    padding-bottom: 20px;
+    color:#ff7a00;
+    padding-left: 10px;
+
+}
+.wraper2
+{
+    margin-top: 50px;
+    width: 900px;
+    position: relative;
+    left: 30%;
+
+}
+
+#reclamations
+{
+    padding: 0px ;
+    /* padding-top: 1px; */
+    margin-top: 50px;
+    text-align: center;
+}
+#reclamations h3
+{
+    width: 400px;
+    text-transform: uppercase;
+    margin: 0 auto 20px auto;
+    /* border-bottom:  1px solid rgb(0, 157, 255); */
+    padding-bottom: 20px;
+    color:#F9733A;
+
+}
+#reclamations h4
+{
+    font-size: medium;
+    padding-bottom: 20px;
+}
+.wraperreclam
+{
+    margin-top: 100px;
+    width: 900px;
+    position: relative;
+    left: 20%;
+
+}
+.sizetext{
+    font-size: 24px;
+}
+.app__dateDeDisponibilite{
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 20px;
+font-weight: bold;
+
+}
+
+
+/* Ading
+ */
+
+ i{
+    font-family: 'Open Sans', sans-serif;
+    margin-left: 10px;
+}
+
+.nav_user{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border: 1px solid;
+    border-radius: 5px;
+}
+.container{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    grid-gap: 2vw;
+}
+
+
+.left{
+    margin: 2vw;
+}
+.left textarea{
+    margin: 2vw;
+    height: 70vh;
+    width: 40vw;
+}
+.right{
+    margin: 2vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* width: 43vw; */
+}
+.right input, .right select{
+    margin: 1vw;
+    height:6vh;
+    padding: 1vw;
+    border-radius:50px;
+    -webkit-border-radius:50px;
+    -moz-border-radius:50px;
+    -ms-border-radius:50px;
+    -o-border-radius:50px;
+}
+
+.bottom{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100vw;
+    margin-bottom: 5vh;
+}
+.bottom p{
+    font-size : 40px;
+}
+
+
+.Date{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.Date label, .Date input{
+    margin: 20px;
+    font-size : 30px;
+}
+.last{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+.last input{
+    cursor: pointer;
+    background-color: white;
+    margin: 3rem;
+    padding: 1vw;
+    border-radius:50px;
+    -webkit-border-radius:50px;
+    -moz-border-radius:50px;
+    -ms-border-radius:50px;
+    -o-border-radius:50px;
+    font-size : 30px;
+}
+/* .app__acceuilMain{
+    min-height: 250vh;
+    max-height:300vh;
+
+} */
+
+
+.P-Premium{
+    font-size: 30px;
+    margin: 1em;
+}
+
+.annonce-phase{
+    margin: 2vw;
+    display: grid;
+    gap:1em;
+    grid-template-columns: repeat(2,1fr);
+}
+.annonce-phase label, .annonce-phase input{
+    margin: 1vw;
+    height:6vh;
+    padding: 1vw;
+    border-radius:50px;
+    -webkit-border-radius:50px;
+    -moz-border-radius:50px;
+    -ms-border-radius:50px;
+    -o-border-radius:50px;
+    font-size: 20px;
+}
+.annonce-phase input[type=checkbox]{
+    margin-left: 5vw;
+    transform: scale(4);
+    -webkit-transform: scale(4);
+    -moz-transform: scale(4);
+    -ms-transform: scale(4);
+    -o-transform: scale(4);
+}
+
+
+.left img{
+    width: 25vw;
+    height: 25vh;
+}
+
+.right p {
+    font-size: 40px;
+    text-align: center;
+}
+
+.last-checkout{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.last-checkout input, .last-checkout Button{
+    background-color: white;
+    margin: 0 8rem;
+    padding: 1vw;
+    border-radius:50px;
+    -webkit-border-radius:50px;
+    -moz-border-radius:50px;
+    -ms-border-radius:50px;
+    -o-border-radius:50px;
+    font-size : 30px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    z-index: 15;
+    width: 100%;
+
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    height: 100%;
+    overflow-y: scroll;
+
+    /* position:relative; */
+
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+.dropdown-content > p {
+    background-color: transparent;
+    width: 100%;
+    border: none;
+    outline: none;
+}
+.app__coloredButton{
+color: rgb(239, 111, 111);
+}
+
+
