@@ -711,3 +711,12 @@ $(".input-daterange input").each(function () {
 $(".datepicker").datepicker({
     disable: [{ from: [2016, 2, 14], to: [2016, 2, 27] }],
 });
+
+
+const moreBtn = document.querySelector(".btn-more");
+const more = document.querySelector(".more");
+
+moreBtn.addEventListener("click", () => {
+  more.classList.toggle("active");
+});
+

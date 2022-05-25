@@ -46,7 +46,7 @@
                 </div>
                 <hr class="app__signInBreak" />
                 <div class="app__SignInButton" id="ConnecterButton">
-                    <p class="app__SIgnInPar">Se connecter</p>
+                    <p class="app__SIgnInPar connexion">Se connecter</p>
                 </div>
 
             </div>
@@ -71,7 +71,6 @@
                 <input name="something" value="{{Session::get("fail")}}"  type="email" placeholder="aza" />
             </div>
             @endif
-
             @csrf
             <div  class="app__inscriptionInput">
                 <input name="email" value='{{old('email')}}' type="email" placeholder="Email" />
@@ -130,3 +129,17 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -12,7 +12,7 @@
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/LOC_HERE3.css">
+    <link rel="stylesheet" href="css/dashboard.css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
@@ -30,45 +30,53 @@
         <div class="menu-items">
             <ul class="nav-links">
                 <li>
-                    <a href="dashboard.php">
+                    <a href="/dashboard">
                     <i class="uil uil-estate"></i>
                     <span class="link-name">Dashboard</span>
                     </a>
                 </li>
                 <li>
-                    <a href="complaints.php">
-                    <i class="uil uil-file-exclamation"></i>
-                    <span class="link-name">Complaints</span>
-                    </a>
+                    <form method="post" action="{{route('complaints',["email"=> $email])}}" class="list-group-item visitor">
+                        @csrf
+                        <button>
+                            <i class="uil uil-file-exclamation"></i>
+                            <span class="link-name">Complaints</span>
+                        </button>
+                    </form>
                 </li>
                 <li>
-                    <a href="announcement.php">
+                    <form method="post" action="{{route('view_AnnoncesAdmin',["email"=> $email])}}" class="list-group-item tumblr">
+                        @csrf
+                        <button type="submit">
                     <i class="uil uil-megaphone"></i>
                     <span class="link-name">Announcements</span>
-                    </a>
+                    </form>
+                </button>
+
                 </li>
                 <li>
-                    <a href="currentrentals.php">
-                    <i class="uil uil-shopping-cart"></i>
-                    <span class="link-name">Current Rents</span>
-                    </a>
+                    <form method="POSt" action="{{route('partners',["email"=> $email])}}" class="list-group-item tumblr">
+                        @csrf
+                    <button type="submit">
+                        <i class="uil uil-users-alt"></i>
+                        <span class="link-name">Partners</span>
+                        </form>
+                    </button>
+
                 </li>
                 <li>
-                    <a href="partners.php">
-                    <i class="uil uil-users-alt"></i>
-                    <span class="link-name">Partners</span>
-                     </a>
-                </li>
-                <li>
-                    <a href="customers.php">
-                    <i class="uil uil-users-alt"></i>
-                    <span class="link-name">Customers</span>
-                    </a>
+                    <form method="POST" action="{{route('customers',["email"=> $email])}}" class="list-group-item tumblr">
+                        @csrf
+                        <button>
+                            <i class="uil uil-users-alt"></i>
+                            <span class="link-name">Customers</span>
+                        </button>
+                    </form>
                 </li>
             </ul>
             <ul class="log-mod">
                 <li>
-                    <a href="#">
+                    <a href="/login">
                     <i class="uil uil-signout"></i>
                     <span class="link-name">Log Out </span>
                     </a>
@@ -85,108 +93,84 @@
             </ul>
         </div>
     </nav>
-    <!-- <script src="js/script.js"></script> -->
-
+    <script src="js/script.js"></script>
 
 <div class="container">
     <div class="header">
             <span class="title"> Dashboard </span>
     </div>
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="list-group">
-                <a href="complaints.php" class="list-group-item visitor">
-                    <h3 class="pull-right">
-                        <i class="fas fa-comment-alt"></i>
-                    </h3>
+                {{-- <form method="post" action="{{route('complaints',["email"=> $email])}}" class="list-group-item visitor"> --}}
+                    {{-- @csrf --}}
+
+                    <h4 class="list-group-item-heading count">{{$data['countrec']}}</h4>
+                        <p class="list-group-item-text">
+                            Complaints</p>
+                {{-- </form> --}}
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="list-group">
+
+                <form method="post" action="{{route('view_AnnoncesAdmin',["email"=> $email])}}" class="list-group-item tumblr">
+                    @csrf
                     <h4 class="list-group-item-heading count">
-                    {{$countrec}} </h4>
+                        {{$data['countann']}}</h4>
                     <p class="list-group-item-text">
-                        Complaints</p>
-                </a>
+                        Announcements
+                    </p>
+                </form>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="list-group">
-                <a href="announcement.php" class="list-group-item tumblr">
-                    <h3 class="pull-right">
-                        <i class="fas fa-bullhorn"></i>
-                    </h3>
-                    <h4 class="list-group-item-heading count"> {{$countann}}</h4>
-                    <p class="list-group-item-text">
-                        Announcements</p>
-                </a>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="list-group">
-                <a href="repads.php" class="list-group-item tumblr">
-                    <h3 class="pull-right">
-                        <i class="fas fa-minus-circle"></i>
-                    </h3>
+
+                <a class="list-group-item tumblr">
                     <h4 class="list-group-item-heading count">
-                        10</h4>
+                        {{$data['countprem']}}</h4>
                     <p class="list-group-item-text">
-                        Reported Ads</p>
+                        Premium Ads
+                    </p>
                 </a>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="list-group">
-                <a href="premads.php" class="list-group-item tumblr">
-                    <h3 class="pull-right">
-                        <i class="fas fa-award"></i>
-                    </h3>
+                <form method="POSt" action="{{route('partners',["email"=> $email])}}" class="list-group-item tumblr">
+                    @csrf
+                    @method("POST")
                     <h4 class="list-group-item-heading count">
-                        3</h4>
-                    <p class="list-group-item-text">
-                        Premium Ads</p>
-                </a>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="list-group">
-                <a href="currentrentals.php" class="list-group-item tumblr">
-                    <h3 class="pull-right">
-                        <i class="fas fa-cart-plus"></i>
-                    </h3>
-                    <h4 class="list-group-item-heading count">
-                        3</h4>
-                    <p class="list-group-item-text">
-                        Current Rentals</p>
-                </a>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="list-group">
-                <a href="partners.php" class="list-group-item tumblr">
-                    <h3 class="pull-right">
-                        <i class="fas fa-user-friends"></i>
-                    </h3>
-                    <h4 class="list-group-item-heading count"> 3</h4>
+                    {{$data['countpart']}}</h4>
                     <p class="list-group-item-text">
                         Partners</p>
-                </a>
+                </form>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="list-group">
-                <a href="customers.php" class="list-group-item tumblr">
-                    <h3 class="pull-right">
-                        <i class="fas fa-user-friends""></i>
-                    </h3>
+                <form method="POST" action="{{route('customers',["email"=> $email])}}" class="list-group-item tumblr">
+                    @csrf
+                    @method("POST")
                     <h4 class="list-group-item-heading count">
-                        15</h4>
+                    {{$data['countcst']}}</h4>
                     <p class="list-group-item-text">
                         Customers</p>
-                </a>
+                </form>
             </div>
         </div>
     </div>
+    <?php
+
+    $currentYear = date("Y");
+
+
+    ?>
     <canvas id="myChart" style="width:100%;max-width:600px;margin: 60px 60px 60px 180px;"></canvas>
         <script>
             var xValues = ["January", "February", "March", "April", "Mai", "June", "July", "August", "September", "October", "November","December"];
-            var yValues = [40, 49, 44, 24, 15,10,30,10,46,16,7,13];
+            var yValues = [{{$data['januaryRentals']}},{{$data['februaryRentals']}},{{$data['marchRentals']}},{{$data['aprilRentals']}},{{$data['mayRentals']}},{{$data['juneRentals']}},{{$data['julyRentals']}},{{$data['augustRentals']}},{{$data['septemberRentals']}},{{$data['octoberRentals']}},{{$data['novemberRentals']}},{{$data['decemberRentals']}}];
             var barColors = ["orange","orange","orange","orange","orange","orange","orange","orange","orange","orange","orange","orange"];
 
             new Chart("myChart", {
@@ -202,15 +186,19 @@
                 legend: {display: false},
                 title: {
                 display: true,
-                text: " Rentals 2022 "
-                }
+                text: ' Rentals <?php echo $currentYear;  ?>  '
+
+
+
+
+            }
             }
             });
         </script>
     <canvas id="myChart1" style="width:100%;max-width:600px;margin: 60px 60px 60px 180px;"></canvas>
         <script>
             var xValues = ["January", "February", "March", "April", "Mai", "June", "July", "August", "September", "October", "November","December"];
-            var yValues = [40, 49, 44, 24, 15,10,30,10,46,16,7,13];
+            var yValues = [{{$data['januaryCustomers']}},{{$data['februaryCustomers']}} ,{{$data['marchCustomers']}} ,{{$data['aprilCustomers']}} ,{{$data['mayCustomers']}} ,{{$data['juneCustomers']}},{{$data['julyCustomers']}},{{$data['augustCustomers']}},{{$data['septemberCustomers']}},{{$data['octoberCustomers']}},{{$data['novemberCustomers']}},{{$data['decemberCustomers']}}];
             var barColors = ["orange","orange","orange","orange","orange","orange","orange","orange","orange","orange","orange","orange"];
 
             new Chart("myChart1", {
@@ -226,7 +214,7 @@
                 legend: {display: false},
                 title: {
                 display: true,
-                text: " Number of Customers 2022 "
+                text: " Number of Customers <?php echo $currentYear;  ?> "
                 }
             }
             });
@@ -234,7 +222,7 @@
         <canvas id="myChart2" style="width:100%;max-width:600px;margin: 60px 60px 60px 180px;"></canvas>
         <script>
             var xValues = ["January", "February", "March", "April", "Mai", "June", "July", "August", "September", "October", "November","December"];
-            var yValues = [40, 49, 44, 24, 15,10,30,10,46,16,7,13];
+            var yValues = [{{$data['januaryPartners']}},{{$data['februaryPartners']}} ,{{$data['marchPartners']}} ,{{$data['aprilPartners']}} ,{{$data['mayPartners']}} ,{{$data['junePartners']}},{{$data['julyPartners']}},{{$data['augustPartners']}},{{$data['septemberPartners']}},{{$data['octoberPartners']}},{{$data['novemberPartners']}},{{$data['decemberPartners']}}];
             var barColors = ["orange","orange","orange","orange","orange","orange","orange","orange","orange","orange","orange","orange"];
 
             new Chart("myChart2", {
@@ -250,7 +238,7 @@
                 legend: {display: false},
                 title: {
                 display: true,
-                text: " Number of Partners 2022 "
+                text: " Number of Partners <?php echo $currentYear;  ?> "
                 }
             }
             });

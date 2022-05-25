@@ -17,10 +17,16 @@
     Prénom :{{$PrenomClient}}
   <br/>
 
-    Nom d'utilisateur : {{$UsernameClient}}
+  Note du Client :{{$NoteClient}}
   <br/>
 
     Email : {{$EmailClient}}
+  <br/>
+
+  Addresse : {{$AdresseClient}}
+  <br/>
+
+  Tel : {{$TelClient}}
   <br/>
 
   <br/>

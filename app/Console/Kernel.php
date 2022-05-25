@@ -20,26 +20,31 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
             $todaysDate = date_create(date("Y-m-d"));
-            $results = DB::select('select * from location  where DateFinLoc >  :DateFinLoc  and Status =:Status and Note=:Note', ['DateFinLoc' => $todaysDate, 'Status' => "Accepter", 'Note' => 'non']);
+
+            $results = DB::select('select * from location  where DateFinLoc <  :DateFinLoc  and Status =:Status and Note=:Note', ['DateFinLoc' => $todaysDate, 'Status' => "Accepter", 'Note' => 'non']);
             $res = json_decode(json_encode($results), true);
             foreach ($res as $dates) {
-                $results = DB::select('UPDATE location set Note=:Note where IdLocation  =:IdLocation   ', ['Note' => "Waiting", 'IdLocation' => $dates["IdLocation"]]);
+                $results = DB::select('UPDATE location set Note=:Note,NotePartenaire=:NotePartenaire where IdLocation  =:IdLocation   ', ['Note' => "Waiting", "NotePartenaire" => "Waiting", 'IdLocation' => $dates["IdLocation"]]);
                 if ($results) {
                     echo "success";
                 }
                 var_dump($dates);
             }
-            echo 'basic message';
+            // if the start of the location and it still not accepted then just refuse it by default
+            $results = DB::select('select * from location  where DateDebutLoc <  :DateDebutLoc  and Status =:Status', ['DateDebutLoc' => $todaysDate, 'Status' => "non"]);
+            $res = json_decode(json_encode($results), true);
+            foreach ($res as $dates) {
+                $results = DB::select('UPDATE location set Status=:Status where IdLocation  =:IdLocation ', ['Status' => "Refuser", 'IdLocation' => $dates["IdLocation"]]);
+                if ($results) {
+                    echo "success";
+                }
+                var_dump($dates);
+            }
         })
             ->everyMinute();
     }
-
     // public function
-    /**
-     * Register the commands for the application.
-     *
-     * @return void
-     */
+
     protected function commands()
     {
         $this->load(__DIR__ . '/Commands');

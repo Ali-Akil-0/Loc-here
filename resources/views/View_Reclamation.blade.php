@@ -12,6 +12,11 @@
 </head>
 
 <body class="app__body">
+
+
+
+
+
     <header class="app__header">
         <div class="app__headerContent">
             <div class="app__logoPlacement">
@@ -59,12 +64,25 @@
 
                  @if(!empty($client))
                     @if($client->NomClint)
-                    <form  method="get" action='{{route('profile') }}'>
-                        @csrf
-                        <button type="submit" class="exploreMoreProducts">
-                            <p class="app__SIgnInPar">{{$client->UsernameClient}}</p>
-                        </button>
-                    </form>
+                   <div class="dropdown">
+                    <span>
+                        <form  method="post" action='{{route('profile',["id"=>$client->id,"type"=>"client"]) }}'>
+                            @csrf
+                            <button type="submit" class="exploreMoreProducts">
+                                <p class="app__SIgnInPar">{{$client->UsernameClient}}</p>
+                            </button>
+                        </form>
+                    </span>
+                    <div class="dropdown-content">
+                        <form  method="post" action='{{route('profile',["id"=>$client->id,"type"=>"client"]) }}'>
+                            @csrf
+                            <button type="submit" class="exploreMoreProducts exploreMoreProducts4">
+                                <p class=""> Profile</p>
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
                     {{-- <form  method="POST" action='{{route('Notes') }}'> --}}
                         {{-- @csrf --}}
                         <div class="dropdown">
@@ -73,24 +91,84 @@
                                 <i class="fa fa-solid fa-bell"></i>
                             </button></span>
                             <div class="dropdown-content">
+
                                 <?php
-                                    foreach ($reclamations as $reclamation) {
 
-                                        // var_dump($reclamations);
+                                foreach ($allNotifsSelected as $notifs) {
+                                    $testing4 = (array)$notifs;
+                                    if($testing4["Objet"]=="Noter Objet, Client et fournisseur"){
+                                        ?>
+                                        <p>
+                                            <?php
+                                            // echo "please bab";
+                                            // echo $testing4["Objet"];
+                                            // echo $testing4["IDclient"];
+                                            // echo $testing4["IDLocation"];
+                                            // echo "please bab";
+                                                ?>
+                                        </p>
 
-                                    if ($reclamation["ReponseReclam"]!=NULL) {
-                                        $reponseAdminClient = $reclamation["ReponseReclam"];
-                                        $idReclamationClient = $reclamation["IdReclamation"];
+                           <form method="post" action="{{route('Notes',['id' => $testing4["IDclient"], 'type'=>"client", 'idLocation'=>$testing4["IDLocation"]]) }}">
+                            @method("POST")
+                            @csrf
+                          <button class="app__coloredButton" type="submit"> Merci de donner votre avis sur la location numéro : <?php echo $testing4["IDLocation"] ;  ?>   </button>
+                           </form>
+                            <?php
+                                    }
+                                    if($testing4["Objet"]=="Accepted"){
+                                            ?>
+
+                                    <p>
+                                        <?php
+                                            echo "Votre demande de location de l'objet num : ";
+                                            echo $testing4["IdObjet"];
+                                            echo " pendant : ";
+                                            echo $testing4["DateDebutLoc"] ;
+                                            echo " au ";
+                                            echo $testing4["DateFinLoc"] ;
+                                            echo " a été approuvé ";
+                                            ?>
+                                    </p>
+                                            <?php
+
+                                    }
+                                    if($testing4["Objet"]=="Refused"){
+                                        ?>
+                                    <p>
+                                        <?php
+                                            echo "Votre demande de location de l'objet num : ";
+                                            echo $testing4["IdObjet"];
+                                            echo " pendant : ";
+                                            echo $testing4["DateDebutLoc"] ;
+                                            echo " au ";
+                                            echo $testing4["DateFinLoc"] ;
+                                            echo " a été refusé ";
+                                            ?>
+                                    </p>
+                                            <?php
+                                    }
+                                    if(!$testing4["IDObjetReclamationClient"]==null){
+
+                                    if($testing4["Objet"]=="Reponse Admin"){
                                     ?>
-                                    <form method="POST" action="{{route('Reclamation',['id' => $client->id, 'type'=>"client","Reponse"=>$reclamation["ReponseReclam"] ,'lu'=>'non']) }}">
+
+                                    <form method="POST" action="{{route('Reclamation',['id' => $testing4["IDclient"], 'type'=>"client",'IdReponse'=>$testing4["IDReclamation"] ,"Reponse"=>$testing4["Message"] ,'lu'=>'non']) }}">
                                         @method("POST")
                                         @csrf
-                                        <button type="submit">L'administrateur a repondu a votre reclamation (Sujet : <?php  echo $reclamation["ObjetReclam"];?>)  (message : <?php  echo $reclamation["ReponseReclam"];?>) </button>
-                                      </form>
+                                        <button class="app__coloredButton" type="submit">L'administrateur a repondu a votre reclamation (Sujet : <?php  echo $testing4["IDObjetReclamationClient"];?>)</button>
+                                    </form>
                                     <?php
-                                     }
-                                    }
-                                   ?>
+                                }
+
+                                if($testing4["Objet"]=="Vue Admin"){
+                                    ?>
+                                                 <p >L'administrateur a vu  votre reclamation (Sujet : <?php  echo $testing4["IDObjetReclamationClient"];?>)  </p>
+                                    <?php
+
+                                }
+                            }
+                            }
+                                ?>
 
                              </div>
                         </div>
@@ -105,41 +183,74 @@
                          @endif
                      @elseif(!empty($partenaire))
                           @if($partenaire->NomPartenaire)
-                 <form  method="get" action='{{route('profile') }}'>
-                    @csrf
-                    <button type="submit" class="exploreMoreProducts">
-                        <p class="app__SIgnInPar">{{ $partenaire->UsernamePartenaire}}</p>
-                    </button>
-                </form>
+
+                <div class="dropdown">
+                    {{-- <form  method="get" action='{{route('profile') }}'> --}}
+                        {{-- @csrf --}}
+                        <span>
+                            <button type="submit" class="exploreMoreProducts">
+                                <p class="app__SIgnInPar">{{ $partenaire->UsernamePartenaire}}</p>
+                            </button>
+                        </span>
+                    {{-- </form> --}}
+                    <div class="dropdown-content">
+                        <form  method="post" action='{{route('profile',["id"=>$partenaire->id,"type"=>"partenaire"]) }}'>
+                        @csrf
+                        <button type="submit" class="exploreMoreProducts exploreMoreProducts3">
+                            <p class=""> Profile</p>
+                        </button>
+                        </form>
+
+                        <form  method="post" action='{{route('archive',['id' => $partenaire->id, 'type'=>"partenaire"]) }}'>
+                            @csrf
+                            <button type="submit" class="exploreMoreProducts exploreMoreProducts2">
+                                <p class="">Archive</p>
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+
                 <div class="dropdown">
                     <span>
                         <button type="submit" class="exploreMoreProducts">
                         <i class="fa fa-solid fa-bell"></i>
-                    </button></span>
+                    </button>
+                 </span>
                     <div class="dropdown-content">
-                        <?php
-                        if(isset($reclamations)){
+                                <?php
+                                // change avis to be got from the db
 
+                                foreach ($allNotifsSelected as $notifs) {
+                                    $testing4 = (array)$notifs;
+                                    if($testing4["Objet"]=="Noter Objet, Client et fournisseur"){
+                                        ?>
+                                        <form method="post" action="{{route('Notes',['id' => $partenaire->id, 'type'=>"partenaire", 'idLocation'=>$testing4["IDLocation"]]) }}">
+                                            @method("POST")
+                                            @csrf
+                                            <button class="app__coloredButton" type="submit"> Merci de donner votre avis sur la location numéro : <?php echo $testing4["IDLocation"] ;  ?>   </button>
+                                        </form>
+                                        <?php
+                                    }
+                                    if(!$testing4["IDObjetReclamationPartenaire"]==null){
 
-                            foreach ($reclamations as $reclamation) {
-
-                                // var_dump($reclamations);
-
-                            if ($reclamation["ReponseReclam"]!=NULL) {
-                                $reponseAdminClient = $reclamation["ReponseReclam"];
-                                $idReclamationClient = $reclamation["IdReclamation"];
-                            ?>
-                            <form method="POST" action="{{route('Reclamation',['id' => $partenaire->id, 'type'=>"partenaire","Reponse"=>$reclamation["ReponseReclam"] ,'lu'=>'non']) }}">
-                                @method("POST")
-                                @csrf
-                                <button type="submit">L'administrateur a repondu a votre reclamation (Sujet : <?php  echo $reclamation["ObjetReclam"];?>)  (message : <?php  echo $reclamation["ReponseReclam"];?>) </button>
-                              </form>
-                            <?php
-                             }
+                                    if($testing4["Objet"]=="Reponse Admin"){
+                                            ?>
+                                             <form method="POST" action="{{route('Reclamation',['id' => $partenaire->id, 'type'=>"partenaire",'IdReponse'=>$testing4["IDReclamation"] ,"Reponse"=>$testing4["Message"] ,'lu'=>'non']) }}">
+                                                @method("POST")
+                                                @csrf
+                                                <button class="app__coloredButton" type="submit">L'administrateur a repondu a votre reclamation (Sujet : <?php  echo $testing4["IDObjetReclamationPartenaire"];?>) </button>
+                                            </form>
+                                            <?php
+                                    }
+                                    if($testing4["Objet"]=="Vue Admin"){
+                                    ?>
+                                                 <p >L'administrateur a vu  votre reclamation (Sujet : <?php  echo $testing4["IDObjetReclamationPartenaire"];?>)  </p>
+                                    <?php
+                                }
                             }
-                        }
-                           ?>
-
+                                }
+                    ?>
                      </div>
                 </div>
                 <form action='{{route('Reclamation',['id' => $partenaire->id, 'type'=>"partenaire"]) }}' method="post">
@@ -153,8 +264,6 @@
                   <p class="app__SIgnInPar">S'inscrire</p>
                  @endif
                  </div>
-
-
                  <hr class="app__signInBreak" />
                  <div class="app__SignInButton" id="ConnecterButton">
                     @if(!empty($client))
@@ -188,8 +297,6 @@
         </div>
         <hr class="app__headerBreak" />
     </header>
-
-
 
     <main class="app__reclamationMain">
 

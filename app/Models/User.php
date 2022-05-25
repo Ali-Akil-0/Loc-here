@@ -16,10 +16,22 @@ class User extends Model
 
         return $results;
     }
+    function selectingAllFromLocation()
+    {
+        $results = DB::select('select * from location where Status = "non" ');
+
+        return $results;
+    }
     function getAllAnnonces()
     {
         $results = DB::select('select * from objet o join partenaires a  on  a.id  = o.idPartenaires JOIN annonce an on an.IdObjet = o.IdObjet join categorie c on c.IdCategorie =o.CategorieObjet   ');
         return $results;
+    }
+    function getALllocations($IdLocation, $IDPartenaire)
+    {
+        $results = DB::select('select * from location where IdLocation !=:IdLocation and Status=:Status and IDPartenaire =:IDPartenaire  ', ["IdLocation" => $IdLocation, "Status" => "non", "IDPartenaire" => $IDPartenaire]);
+        $res = json_decode(json_encode($results), true);
+        return $res;
     }
     function checkingAllAnnnonces()
     {
@@ -28,7 +40,7 @@ class User extends Model
     }
     function getVille()
     {
-        $results = DB::select('select Distinct (VilleObjet) from objet');
+        $results = DB::select('select Distinct * from ville');
         return $results;
     }
 
@@ -132,6 +144,12 @@ class User extends Model
         $res = json_decode(json_encode($results), true);
         return $res;
     }
+    public function LocationRefuser($idClient)
+    {
+        $results = DB::select('select * from location   where IdClient  =:IdClient  and Status=:Status ', ['IdClient' => $idClient, 'Status' => "Refuser"]);
+        $res = json_decode(json_encode($results), true);
+        return $res;
+    }
     // une location has an location id and id client and id annonce
     public function GettingInfoForEmail($IdLocation)
     {
@@ -142,7 +160,8 @@ class User extends Model
     public function GettingTheObjetFormMAil($IdAnnonce)
     {
         $results = DB::select('select * from objet o join annonce a  on  a.IdObjet  = o.IdObjet  where a.IdAnnonce =:IdAnnonce ', ['IdAnnonce' => $IdAnnonce]);
-        $res = json_decode(json_encode($results), true);
+        $res = (array)$results[0];
+        // var_dump($res);
         return $res;
     }
 
@@ -154,7 +173,7 @@ class User extends Model
     }
     public function CheckNotePartenaire($IDPartenaire)
     {
-        $results = DB::select('select * from location  where Note=:Note and IDPartenaire  =:IDPartenaire    ', ['Note' => "Waiting", 'IDPartenaire' => $IDPartenaire]);
+        $results = DB::select('select * from location  where NotePartenaire=:NotePartenaire and IDPartenaire  =:IDPartenaire    ', ['NotePartenaire' => "Waiting", 'IDPartenaire' => $IDPartenaire]);
         $res = json_decode(json_encode($results), true);
         return $res;
     }
@@ -176,12 +195,101 @@ class User extends Model
     public function getPartenaireInfo($id)
     {
         $results = DB::select('select * from partenaires  where id   =:id     ', ['id' => $id]);
+        return $results;
+    }
+    public function getClientInfo($id)
+    {
+        $results = DB::select('select * from clients  where id   =:id     ', ['id' => $id]);
         $res = json_decode(json_encode($results), true);
         return $res;
     }
 
+    public function checkifdemanded($IdClient)
+    {
+        $results = DB::select('select * from location  where IdClient =:IdClient and Status=:Status   ', ['IdClient' => $IdClient, 'Status' => "non"]);
+        $res = json_decode(json_encode($results), true);
+        return $res;
+    }
+    public function avisClient($IdClient)
+    {
+        $results = DB::select('select * from avisclients ac join partenaires p on p.id = ac.idPartenaires  where idClients  =:idClients   ', ['idClients' => $IdClient]);
+        // var_dump($results);
+        // $res = json_decode(json_encode($results), true);
+        return $results;
+    }
+    public function avisPartenaires2($idPartenaires)
+    {
+        $results = DB::select('select * from avispartenaires ap join clients c on c.id = ap.idClients   where idPartenaires    =:idPartenaires     ', ['idPartenaires' => $idPartenaires]);
+        return $results;
+    }
 
+    public function SelectingNotifs()
+    {
+        $results = DB::select('select * from notificationsclient;');
+        return $results;
+    }
+    public function insretingNotes($IDLocation, $IDclient, $IDPartenaire)
+    {
+        echo "maybe insretign 1";
+        DB::INSERT('insert into notificationsclient ( IDclient,Objet, IDPartenaire, IDLocation,LuClient ,LuPartenaire) VALUES (?,?,?,?,?,?)', [$IDclient, "Noter Objet, Client et fournisseur", $IDPartenaire, $IDLocation, 'non', "non"]);
+        echo "again mayb";
+    }
+    public function NoterInsert($idPartenaires)
+    {
+        $results = DB::select('select * from avispartenaires ap join clients c on c.id = ap.idClients   where idPartenaires    =:idPartenaires     ', ['idPartenaires' => $idPartenaires]);
+        return $results;
+    }
+    public function insertMessgaeAdmin($IDReclamation, $reponse, $IDclient, $ObjetClient)
+    {
+        echo "maybe insretign 1";
+        DB::INSERT('insert into notificationsclient (IDReclamation, IDclient,Objet,Message,IDObjetReclamationClient) VALUES (?,?,?,?,?)', [$IDReclamation, $IDclient, "Reponse Admin", $reponse, $ObjetClient]);
+        echo "again mayb";
+    }
+    public function insertMessgaeAdminPartenaire($IDReclamation, $reponse, $IDPartenaire, $ObjetClient)
+    {
+        echo "maybe insretign 1";
+        DB::INSERT('insert into notificationsclient (IDReclamation, IDPartenaire,Objet,Message,IDObjetReclamationPartenaire) VALUES (?,?,?,?,?)', [$IDReclamation, $IDPartenaire, "Reponse Admin", $reponse, $ObjetClient]);
+        echo "again mayb";
+    }
 
-
+    public function insertVueAdmin($IDReclamation, $IDclient, $ObjetClient)
+    {
+        echo "maybe insretign 1";
+        if (isset($ObjetClient)) {
+            DB::INSERT('insert into notificationsclient (IDReclamation, IDclient,Objet,IDObjetReclamationClient) VALUES (?,?,?,?)', [$IDReclamation, $IDclient, "Vue Admin", $ObjetClient]);
+        } else {
+            DB::INSERT('insert into notificationsclient (IDReclamation, IDclient,Objet) VALUES (?,?,?)', [$IDReclamation, $IDclient, "Vue Admin"]);
+        }
+        echo "again mayb";
+    }
+    public function insertVueAdminPartenaire($IDReclamation, $IDPartenaire, $ObjetClient)
+    {
+        echo "maybe insretign 1";
+        if (isset($ObjetClient)) {
+            DB::INSERT('insert into notificationsclient (IDReclamation, IDPartenaire,Objet,IDObjetReclamationPartenaire) VALUES (?,?,?,?)', [$IDReclamation, $IDPartenaire, "Vue Admin", $ObjetClient]);
+        } else {
+            DB::INSERT('insert into notificationsclient (IDReclamation, IDPartenaire,Objet) VALUES (?,?,?)', [$IDReclamation, $IDPartenaire, "Vue Admin"]);
+        }
+        echo "again mayb";
+    }
+    public function insertignAccepted($DateDebutLoc, $DateFinLoc, $IDLocation, $IDclient, $IdObjet)
+    {
+        echo "maybe insretign 1";
+        DB::INSERT('insert into notificationsclient (IDLocation, IDclient,IdObjet,Message,Objet,DateDebutLoc,DateFinLoc) VALUES (?,?,?,?,?,?,?)', [$IDLocation, $IDclient, $IdObjet, "Accepted", "Accepted", $DateDebutLoc, $DateFinLoc]);
+        echo "again mayb";
+    }
+    public function insertignRefused($DateDebutLoc, $DateFinLoc, $IDLocation, $IDclient, $IdObjet)
+    {
+        echo "maybe insretign 1";
+        DB::INSERT('insert into notificationsclient (IDLocation, IDclient,IdObjet,Message,Objet,DateDebutLoc,DateFinLoc) VALUES (?,?,?,?,?,?,?)', [$IDLocation, $IDclient, $IdObjet, "Refused", "Refused", $DateDebutLoc, $DateFinLoc]);
+        echo "again mayb";
+    }
+    public function selectingNotifications()
+    {
+        // echo "maybe insretign 1";
+        $results = DB::select('select * from notificationsclient order by DateAjout desc ;  ');
+        // echo "again mayb";
+        return $results;
+    }
     use HasFactory;
 }

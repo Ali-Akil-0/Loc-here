@@ -1,3 +1,6 @@
+<?php
+ini_set('memory_limit', '2048M');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,14 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/LOC_HERE.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
-    <!-- <script>
-        // $(document).ready(function() {
-        //     $("button").click(function() {
-        //         $("#div1").load("demo_test.txt");
-        //     });
-        // });
-    </script> -->
+
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -39,6 +35,9 @@
 </head>
 
 <body class="app__body">
+
+
+
     <header class="app__header">
         <div class="app__headerContent">
             <div class="app__logoPlacement">
@@ -55,44 +54,268 @@
                     <p class="app__option">Contrat</p>
                 </div>
                 <div class="app__Acceuil">
-                    <p class="app__option">Publier</p>
+                    @if(!empty($client))
+                          @if($client->NomClint)
+                          <form  method="post" action=''>
+                            @method('POST')
+                            @csrf
+                            <button type="submit" class="exploreMoreProducts">
+                                <p class="app__option">Devenir Partanaire</p>
+                            </button>
+                        </form>
+                         {{-- <p class="app__option">Devenir Partanaire</p> --}}
+                        @endif
+                    @elseif(!empty($partenaire))
+                         @if($partenaire->NomPartenaire)
+
+                          <form  method="post" action='{{route('publier',['id' => $partenaire->id])}}'>
+                          @csrf
+                          <button type="submit" class="exploreMoreProducts">
+                            <p class="app__option">publier</p>
+                          </button>
+                           </form>
+                           @endif
+                          @else
+                          <p class="app__option">publier</p>
+                      @endif
                 </div>
             </div>
             <div class="app__signIn">
                 <div class="app__SignInButton" id="InscrireButton">
-            @if(isset($type))
-                @if($type=="client")
-                    <p class="app__SIgnInPar">{{$user->UsernameClient}}</p>
-                    <i class="fa fa-solid fa-bell"></i>
-                    <i class="fa fa-solid fa-flag"></i>
-                 @elseif($type=="partenaire")
-                 <p class="app__SIgnInPar">{{$user->UsernamePartenaire}}</p>
-                    <i class="fa fa-solid fa-bell"></i>
-                    <i class="fa fa-solid fa-flag"></i>
 
-                 @endif
-                 @else
-                 <p class="app__SIgnInPar">S'inscrire</p>
-                @endif
+                 @if(!empty($client))
+                    @if($client->NomClint)
+                   <div class="dropdown">
+                    <span>
+                        <form  method="post" action='{{route('profile',["id"=>$client->id,"type"=>"client"]) }}'>
+                            @csrf
+                            <button type="submit" class="exploreMoreProducts">
+                                <p class="app__SIgnInPar">{{$client->UsernameClient}}</p>
+                            </button>
+                        </form>
+                    </span>
+                    <div class="dropdown-content">
+                        <form  method="post" action='{{route('profile',["id"=>$client->id,"type"=>"client"]) }}'>
+                            @csrf
+                            <button type="submit" class="exploreMoreProducts exploreMoreProducts4">
+                                <p class=""> Profile</p>
+                            </button>
+                        </form>
+                    </div>
+
                 </div>
-                <hr class="app__signInBreak" />
-                <div class="app__SignInButton" id="ConnecterButton">
-                    @if(isset($type))
+                    {{-- <form  method="POST" action='{{route('Notes') }}'> --}}
+                        {{-- @csrf --}}
+                        <div class="dropdown">
+                            <span>
+                                <button type="submit" class="exploreMoreProducts">
+                                <i class="fa fa-solid fa-bell"></i>
+                            </button></span>
+                            <div class="dropdown-content">
+
+                                <?php
+
+                                foreach ($allNotifsSelected as $notifs) {
+                                    $testing4 = (array)$notifs;
+                                    if($testing4["Objet"]=="Noter Objet, Client et fournisseur"){
+                                        ?>
+                                        <p>
+                                            <?php
+                                            // echo "please bab";
+                                            // echo $testing4["Objet"];
+                                            // echo $testing4["IDclient"];
+                                            // echo $testing4["IDLocation"];
+                                            // echo "please bab";
+                                                ?>
+                                        </p>
+
+                           <form method="post" action="{{route('Notes',['id' => $testing4["IDclient"], 'type'=>"client", 'idLocation'=>$testing4["IDLocation"]]) }}">
+                            @method("POST")
+                            @csrf
+                          <button class="app__coloredButton" type="submit"> Merci de donner votre avis sur la location numéro : <?php echo $testing4["IDLocation"] ;  ?>   </button>
+                           </form>
+                            <?php
+                                    }
+                                    if($testing4["Objet"]=="Accepted"){
+                                            ?>
+
+                                    <p>
+                                        <?php
+                                            echo "Votre demande de location de l'objet num : ";
+                                            echo $testing4["IdObjet"];
+                                            echo " pendant : ";
+                                            echo $testing4["DateDebutLoc"] ;
+                                            echo " au ";
+                                            echo $testing4["DateFinLoc"] ;
+                                            echo " a été approuvé ";
+                                            ?>
+                                    </p>
+                                            <?php
+
+                                    }
+                                    if($testing4["Objet"]=="Refused"){
+                                        ?>
+                                    <p>
+                                        <?php
+                                            echo "Votre demande de location de l'objet num : ";
+                                            echo $testing4["IdObjet"];
+                                            echo " pendant : ";
+                                            echo $testing4["DateDebutLoc"] ;
+                                            echo " au ";
+                                            echo $testing4["DateFinLoc"] ;
+                                            echo " a été refusé ";
+                                            ?>
+                                    </p>
+                                            <?php
+                                    }
+                                    if(!$testing4["IDObjetReclamationClient"]==null){
+                                    if($testing4["Objet"]=="Reponse Admin"){
+                                    ?>
+
+                                    <form method="POST" action="{{route('Reclamation',['id' => $testing4["IDclient"], 'type'=>"client",'IdReponse'=>$testing4["IDReclamation"] ,"Reponse"=>$testing4["Message"] ,'lu'=>'non']) }}">
+                                        @method("POST")
+                                        @csrf
+                                        <button class="app__coloredButton" type="submit">L'administrateur a repondu a votre reclamation (Sujet : <?php  echo $testing4["IDObjetReclamationClient"];?>)</button>
+                                    </form>
+                                    <?php
+                                }
+
+                                if($testing4["Objet"]=="Vue Admin"){
+                                    ?>
+                                                 <p >L'administrateur a vu  votre reclamation (Sujet : <?php  echo $testing4["IDObjetReclamationClient"];?>)  </p>
+                                    <?php
+
+                                }
+                            }
+                            }
+                                ?>
+
+                             </div>
+                        </div>
+                    {{-- </form> --}}
+
+                    <form action='{{route('Reclamation',['id' => $client->id, 'type'=>"client"]) }}' method="post">
+                        @csrf
+                        <button type="submit" class="exploreMoreProducts">
+                            <i class="fa fa-solid fa-flag"></i>
+                        </button>
+                    </form>
+                         @endif
+                     @elseif(!empty($partenaire))
+
+                          @if($partenaire->NomPartenaire)
+
+                <div class="dropdown">
+                    {{-- <form  method="get" action='{{route('profile') }}'> --}}
+                        {{-- @csrf --}}
+                        <span>
+                            <button type="submit" class="exploreMoreProducts">
+                                <p class="app__SIgnInPar">{{ $partenaire["UsernamePartenaire"]}}</p>
+                            </button>
+                        </span>
+                    {{-- </form> --}}
+                    <div class="dropdown-content">
+                        <form  method="post" action='{{route('profile',["id"=>$partenaire->id,"type"=>"partenaire"]) }}'>
+                        @csrf
+                        <button type="submit" class="exploreMoreProducts exploreMoreProducts3">
+                            <p class=""> Profile</p>
+                        </button>
+                        </form>
+
+                        <form  method="post" action='{{route('archive',['id' => $partenaire->id, 'type'=>"partenaire"]) }}'>
+                            @csrf
+                            <button type="submit" class="exploreMoreProducts exploreMoreProducts2">
+                                <p class="">Archive</p>
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <span>
+                        <button type="submit" class="exploreMoreProducts">
+                        <i class="fa fa-solid fa-bell"></i>
+                    </button>
+                 </span>
+                    <div class="dropdown-content">
+                                <?php
+                                // change avis to be got from the db
+
+                                foreach ($allNotifsSelected as $notifs) {
+                                    $testing4 = (array)$notifs;
+                                    if($testing4["Objet"]=="Noter Objet, Client et fournisseur"){
+                                        ?>
+                                        <form method="post" action="{{route('Notes',['id' => $partenaire->id, 'type'=>"partenaire", 'idLocation'=>$testing4["IDLocation"]]) }}">
+                                            @method("POST")
+                                            @csrf
+                                            <button class="app__coloredButton" type="submit"> Merci de donner votre avis sur la location numéro : <?php echo $testing4["IDLocation"] ;  ?>   </button>
+                                        </form>
+
+
+                                        <?php
+
+                                    }
+                                    if(!$testing4["IDObjetReclamationPartenaire"]==null){
+                                    if($testing4["Objet"]=="Reponse Admin"){
+                                            ?>
+                                             <form method="POST" action="{{route('Reclamation',['id' => $partenaire->id, 'type'=>"partenaire",'IdReponse'=>$testing4["IDReclamation"] ,"Reponse"=>$testing4["Message"] ,'lu'=>'non']) }}">
+                                                @method("POST")
+                                                @csrf
+                                                <button class="app__coloredButton" type="submit">L'administrateur a repondu a votre reclamation (Sujet : <?php  echo $testing4["IDObjetReclamationPartenaire"];?>) </button>
+                                            </form>
+                                            <?php
+
+                                    }
+                                    if($testing4["Objet"]=="Vue Admin"){
+                                    ?>
+                                                 <p >L'administrateur a vu  votre reclamation (Sujet : <?php  echo $testing4["IDObjetReclamationPartenaire"];?>)  </p>
+                                    <?php
+                                         }
+                                     }
+                                }
+                    ?>
+                     </div>
+                </div>
+                <form action='{{route('Reclamation',['id' => $partenaire->id, 'type'=>"partenaire"]) }}' method="post">
+                    @csrf
+                    <button type="submit" class="exploreMoreProducts">
+                        <i class="fa fa-solid fa-flag"></i>
+                    </button>
+                </form>
+                    @endif
+                    @else
+                  <p class="app__SIgnInPar">S'inscrire</p>
+                 @endif
+                 </div>
+                 <hr class="app__signInBreak" />
+                 <div class="app__SignInButton" id="ConnecterButton">
+                    @if(!empty($client))
+                    @if($client->NomClint)
                     <form  method="get" action='{{route('login') }}'>
                         @csrf
                         <button type="submit" class="exploreMoreProducts">
                             <p class="app__SIgnInPar">Se deconnecter</p>
                         </button>
                     </form>
-                   @else
-                   <form  method="get" action='{{route('login') }}'>
+                  @endif
+                  @elseif(!empty($partenaire))
+                     @if($partenaire->NomPartenaire)
+                  <form  method="get" action='{{route('login') }}'>
+                    @csrf
+                    <button type="submit" class="exploreMoreProducts">
+                        <p class="app__SIgnInPar">Se deconnecter</p>
+                    </button>
+                </form>
+                @endif
+                  @else
+                  <form  method="get" action='{{route('login') }}'>
                     @csrf
                     <button type="submit" class="exploreMoreProducts">
                         <p class="app__SIgnInPar">Se connecter</p>
                     </button>
                 </form>
-
-                   @endif
+                  @endif
                 </div>
             </div>
         </div>
@@ -101,6 +324,9 @@
 
 
     <main class="app__annonceMain">
+        <?php
+        // var_dump($partenaire["UsernamePartenaire"]);
+        ?>
         <div class="app__annonceBanner">
             <div class="app__annonceImageContainer">
                 <img src="data:image/jpeg;base64,<?php echo base64_encode($image); ?>"  class="app__annonceImage" />
@@ -118,7 +344,7 @@
                     </div>
                     <div class="app__annonceRating">
                         <input id="input-1" name="input-1" class="rating rating-loading" data-min="0" data-max="5"
-                            data-step="0.1" value="{{$Annonce["NoteTotalObj"]}}">
+                            data-step="0.1" disabled value="{{$noteTotalObjet}}">
                     </div>
                 </div>
                 <div class="app__annonceLocation">
@@ -129,7 +355,6 @@
                         <input type="text" class="daterange"  name="date"/>
                         <p>
                             <?php
-
                                 // //    echo (array)$dates[0];
                                 // //    echo ((array)$dates[0])["DateFinLoc"];
                                 //     foreach($dates as $date){
@@ -139,7 +364,6 @@
                                     // echo $Annonce["DateDebut"]  ;
                                 // //     echo "hello" ;
                                     // echo  $Annonce["DateFin"] ;
-
                                ?>
                             </p>
                         <script>
@@ -168,7 +392,7 @@
                         <span>
                             Se Connecter
                         </span>
-                        <p>pour</p>
+                        <p>pour louer</p>
                     </button>
                 </form>
 
@@ -178,7 +402,6 @@
             </div>
         </div>
         <div class="app__annonceBottom">
-
             <div class="app__annonceInfo">
                 <div class="app__annonceInfoObjet">
                     <p class="app__annonceInfoTitre">Info Objet : </p>
@@ -189,17 +412,27 @@
 
                        <?php if(isset($type)){
                            if($type=="partenaire"){
-                            foreach ($Demandes as $Demande) {
-                            if ($Annonce["idPartenaires"] == $user->id) {
+                               $i=0 ;
+                               if(isset($Demandes)){
 
+                            foreach ($Demandes as $Demande) {
+                                // var_dump($Demande);
+
+                            if ($Annonce["idPartenaires"] == $user->id && $Annonce["archivee"]=="non" ) {
+
+                                ?>
+                                <?php
+
+                                if($i==0){
                                 ?>
                                 <p class="app__annonceInfoTitre">Demandes de location : </p>
                                 <?php
-                                // echo ($Demande["DateDebutLoc"]);
-                                // echo ($Demande["DateFinLoc"]);
-                                // echo ($Demande["IDANnonce"]);
-                                // echo ($Demande["IdClient"]);
-                                // echo ($Demande["Status"]);
+                                $i++  ;
+                                }
+
+                                ?>
+                                <?php
+
                                 if($Demande["Status"]=="non"){
 
                                     ?>
@@ -227,22 +460,13 @@
                                    </p>
 
                                     <?php
-
-
                                 }
-
                                 ?>
-                                  <div class="app__LocationsEnCour">
-                                    <p class="app__annonceInfoTitre">Location en Cours : </p>
-
-                                </div>
-
                                 <?php
                             }
-                            }
-
+                           }
                             foreach ($Demandes as $Demande) {
-                            if ($Annonce["idPartenaires"] == $user->id) {
+                            if ($Annonce["idPartenaires"] == $user->id && $Annonce["IdAnnonce"]==$Demande["IDANnonce"] && $Annonce["archivee"]=="non") {
                                 $todaysDate = date_create(date("Y-m-d"));
                                 $StartDate = date_create($Demande["DateDebutLoc"]);
                                  $EndDate = date_create($Demande["DateFinLoc"]);
@@ -253,6 +477,10 @@
 
                                 if($Demande["Status"]=="Accepter"&& $StartDate < $todaysDate && $EndDate > $todaysDate){
                                     ?>
+                                     <div class="app__LocationsEnCour">
+                                        <p class="app__annonceInfoTitre">Location en Cours : </p>
+
+                                    </div>
                                     <p>
                                         <?php
                                              echo ($Demande["UsernameClient"]);
@@ -265,6 +493,7 @@
                                     <?php
                                 }
                             }}
+                        }
                             ?>
                             <?php
 
@@ -277,7 +506,7 @@
                 </div>
                 <div class="app__annoncePartenaire">
                     <div>
-                        <img src="/img/Akil.png" class="app__annoncePartenaireImage" />
+                        <img src="data:image/jpeg;base64,<?php echo base64_encode($partenaire['ImagePartenaire']); ?>" class="app__annoncePartenaireImage" />
                     </div>
                     <div class="app__annoncePartenaireNom">
                         <p class="app__annoncePartenaireTitre">
@@ -314,26 +543,39 @@
                     </div>
                     <div class="app__annoncePartenaireRating">
                         <div class="app__annonceRating app__annonceRating2">
+                            {{-- <?php
+                                // var_dump($notePartenaire);
+                                ?> --}}
                             <input id="input-2" name="input-2" class="rating rating-loading" data-min="0" data-max="5"
-                                data-step="0.1" value="{{$partenaire['EmailPartenaire']}}">
+                                data-step="0.1" disabled value="{{$notePartenaire['AVG(Notepartenaires)']}}">
                         </div>
                     </div>
                 </div>
-
             </div>
 
+
             <div class="app__annonceCommentairesContainer">
-                <div class="app__annonceCommentaireTitre">
-                    <p class="app__annonceInfoTitre">Commentaires : </p>
-                </div>
+
                 <?php
                 $i = 0;
+                $i2=0 ;
                 foreach ($avisObjet as $avis) {
-                ?>
-                <div class="app__annonceCommentaires">
+                //  var_dump($avis);
+                    if($avis["positif"]=="oui"){
+                        if($i2==0){
+                                ?>
+                                  <div class="app__annonceCommentaireTitre">
+                                    <p class="app__annonceInfoTitre">Commentaires positifs : </p>
+                                </div>
+                                <?php
 
+                            $i2=1 ;
+                        }
+                        ?>
+
+                <div class="app__annonceCommentaires">
                     <div class="app__annonceCommentaireContainer">
-                        <img src="/img/Akil.png" class="app__annonceImageUtilisateur" />
+                        <img src="data:image/jpeg;base64,<?php echo base64_encode($avis['ImageClient']); ?>" class="app__annonceImageUtilisateur" />
                         <div class="app__annonceCommentaireDesc">
                             <div class="annonceCommentaireTop">
                                 <p class="app__annonceCommentaireNom">
@@ -342,7 +584,7 @@
                                 <div class="app__annonceCommentaireRating">
                                     <div class="app__annonceRating app__annonceRating2">
                                         <input id="input-3" name="input-3" class="rating rating-loading" data-min="0"
-                                            data-max="5" data-step="0.1" value="{{$avis["NoteObjet"]}}">
+                                            data-max="5" disabled data-step="0.1" value="{{$avis["NoteObjet"]}}">
                                     </div>
                                 </div>
 
@@ -360,13 +602,90 @@
                 </div>
                 <?php
                 }
+                }
                 ?>
 
 
+                <?php
 
 
-            </div>
-        </div>
+                $i = 0;
+                $i2=0 ;
+
+                foreach ($avisObjet as $avis) {
+
+                    if(!isset($avis)){
+
+                        ?>
+                         <div class="app__annonceCommentaireTitre">
+                            <p class="app__annonceInfoTitre">Commentaires négatifs : </p>
+                        </div>
+                        <div class="app__annonceCommentaires">
+
+                            <div class="app__annonceCommentaireContainer">
+                                <div class="app__annonceCommentaireDesc">
+
+                                    <div class="app__annonceCommentaireContent">
+                                        Aucun commentaire négatif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                        }
+                    if($avis["positif"]=="non"){
+
+                        if($î2==0){
+                                ?>
+                                 <div class="app__annonceCommentaireTitre">
+                                    <p class="app__annonceInfoTitre">Commentaires négatifs : </p>
+                                </div>
+                                <?php
+
+                            $i2=1 ;
+
+                        }
+                        ?>
+                        <?php
+
+                ?>
+                <div class="app__annonceCommentaires">
+
+                    <div class="app__annonceCommentaireContainer">
+                        <img src="/img/Akil.png" class="app__annonceImageUtilisateur" />
+                        <div class="app__annonceCommentaireDesc">
+                            <div class="annonceCommentaireTop">
+                                <p class="app__annonceCommentaireNom">
+                                    {{$avis["UsernameClient"]}}
+                                </p>
+                                <div class="app__annonceCommentaireRating">
+                                    <div class="app__annonceRating app__annonceRating2">
+                                        <input id="input-3" name="input-3" class="rating rating-loading" data-min="0"
+                                            data-max="5" disabled data-step="0.1" value="{{$avis["NoteObjet"]}}">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="app__annonceCommentaireContent">
+                                {{$avis["CommentaireObjet"]}}
+                            </div>
+                        </div>
+                        <div class="app__annonceCommentaireTime">
+                            <p> <span class="app__annonceCommentaireDate">{{$avis["DateAvisObjet"]}}</span></p>
+                        </div>
+                    </div>
+
+
+                </div>
+                <?php
+
+                }
+                }?>
+
+
+              </div>
+
+             </div>
 
 
     </main>

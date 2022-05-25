@@ -17,8 +17,13 @@ class InfoClient extends Mailable
     public  $NomObjet;
     public  $StartDate;
     public  $EndDate;
+    public  $AdresseClient;
+    public  $TelClient;
+    public  $NoteClient;
 
-    public function __construct($NomClient, $PrenomClient, $UsernameClient, $EmailClient, $NomObjet, $StartDate, $EndDate)
+
+
+    public function __construct($NomClient, $PrenomClient, $UsernameClient, $EmailClient, $NomObjet, $StartDate, $EndDate, $TelClient, $AdresseClient, $NoteClient)
     {
         $this->EndDate = $EndDate;
         $this->PrenomClient = $PrenomClient;
@@ -27,6 +32,9 @@ class InfoClient extends Mailable
         $this->EmailClient = $EmailClient;
         $this->NomObjet = $NomObjet;
         $this->StartDate = $StartDate;
+        $this->TelClient = $TelClient;
+        $this->AdresseClient = $AdresseClient;
+        $this->NoteClient = $NoteClient;
     }
 
 
